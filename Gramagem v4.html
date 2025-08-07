@@ -12,119 +12,172 @@
     input, select { width: 120px; padding: 5px; margin-right: 10px; }
     .result { margin-top: 20px; font-weight: bold; font-size: 1.2em; }
     button { margin-top: 15px; padding: 8px 16px; }
+    #algodaoCampos, #linhoCampos { transition: all 0.3s ease; }
   </style>
 </head>
 <body>
   <div class="container">
-  <h1>Calculadora de Gramagem e Peso Linear</h1>
+    <h1>Calculadora de Gramagem e Peso Linear</h1>
 
-  <label>Nome do Projeto: <input type="text" id="nomeProjeto" placeholder="Ex: Tecidos Verão 2025" style="width: 300px;"></label>
+    <label>Nome do Projeto: <input type="text" id="nomeProjeto" placeholder="Ex: Tecidos Verão 2025" style="width: 300px;"></label>
 
-    <h2>Algodão (Ne)</h2>
-    <label>Fios Teia: <input type="number" id="fiosTeiaCO" value="74"></label>
-    <label>Fios Trama: <input type="number" id="fiosTramaCO" value="45"></label>
-    <label>Ne Teia (ex: 20 ou 26/2): <input type="text" id="neTeiaCO" value="20"></label>
-    <label>Ne Trama (ex: 15 ou 30/2): <input type="text" id="neTramaCO" value="15"></label>
-    <label>Encolhimento Teia (%): <input type="number" id="encTeiaCO" value="1"></label>
-    <label>Encolhimento Trama (%): <input type="number" id="encTramaCO" value="1"></label>
-    <label>Largura da Tela (cm): <input type="number" id="larguraCO" value="330"></label>
-
-    <h2>Linho (Nm)</h2>
-    <label>Fios Teia: <input type="number" id="fiosTeiaLI" value="74"></label>
-    <label>Fios Trama: <input type="number" id="fiosTramaLI" value="23"></label>
-    <label>Nm Teia (ex: 7 ou 26/2): <input type="text" id="nmTeiaLI" value="7"></label>
-    <label>Nm Trama (ex: 6 ou 30/2): <input type="text" id="nmTramaLI" value="6"></label>
-    <label>Encolhimento Teia (%): <input type="number" id="encTeiaLI" value="1"></label>
-    <label>Encolhimento Trama (%): <input type="number" id="encTramaLI" value="1"></label>
-    <label>Largura da Tela (cm): <input type="number" id="larguraLI" value="330"></label>
-
-    <label>Exportar: 
-      <select id="exportarTipo">
+    <label>Tipo de Cálculo:
+      <select id="exportarTipo" onchange="mostrarCampos()">
         <option value="ambos">Algodão e Linho</option>
         <option value="algodao">Somente Algodão</option>
         <option value="linho">Somente Linho</option>
       </select>
-    </label>
+    </label><br><br>
+
+    <div id="algodaoCampos">
+      <h2>Algodão (Ne)</h2>
+      <label>Fios Teia: <input type="number" id="fiosTeiaCO" value="110"></label>
+      <label>Fios Trama: <input type="number" id="fiosTramaCO" value="90"></label>
+      <label>Ne Teia: <input type="text" id="neTeiaCO" value="40"></label>
+      <label>Ne Trama: <input type="text" id="neTramaCO" value="40"></label>
+      <label>Encolhimento Teia (%): <input type="number" id="encTeiaCO" value="1"></label>
+      <label>Encolhimento Trama (%): <input type="number" id="encTramaCO" value="1"></label>
+      <label>Largura da Tela (cm): <input type="number" id="larguraCO" value="315"></label>
+    </div>
+
+    <div id="linhoCampos">
+      <h2>Linho (Nm)</h2>
+      <label>Fios Teia: <input type="number" id="fiosTeiaLI" value="50"></label>
+      <label>Fios Trama: <input type="number" id="fiosTramaLI" value="48"></label>
+      <label>Nm Teia: <input type="text" id="nmTeiaLI" value="26"></label>
+      <label>Nm Trama: <input type="text" id="nmTramaLI" value="26"></label>
+      <label>Encolhimento Teia (%): <input type="number" id="encTeiaLI" value="1"></label>
+      <label>Encolhimento Trama (%): <input type="number" id="encTramaLI" value="1"></label>
+      <label>Largura da Tela (cm): <input type="number" id="larguraLI" value="315"></label>
+    </div>
 
     <button onclick="calcular()">Calcular</button>
     <button onclick="exportarPDF()">Exportar para PDF</button>
 
     <div class="result" id="resultado"></div>
   </div>
-
   <script>
-    function corrigirTitulo(titulo) {
-      if (titulo.includes("/")) {
-        const partes = titulo.split("/");
-        return parseFloat(partes[0]) / parseFloat(partes[1]);
-      }
-      return parseFloat(titulo);
+  
+  function mostrarCampos() {
+    const tipo = document.getElementById("exportarTipo").value;
+    document.getElementById("algodaoCampos").style.display = (tipo === "linho") ? "none" : "block";
+    document.getElementById("linhoCampos").style.display = (tipo === "algodao") ? "none" : "block";
+  }
+
+  window.onload = mostrarCampos;
+
+  function corrigirTitulo(titulo) {
+    if (titulo.includes("/")) {
+      const partes = titulo.split("/");
+      return parseFloat(partes[0]) / parseFloat(partes[1]);
     }
+    return parseFloat(titulo);
+  }
 
-    let resultados = {};
+  let resultados = {};
 
-    function calcular() {
-      // Algodão
-      const fiosTeiaCO = parseFloat(document.getElementById("fiosTeiaCO").value);
-      const fiosTramaCO = parseFloat(document.getElementById("fiosTramaCO").value);
-      const neTeiaCO = corrigirTitulo(document.getElementById("neTeiaCO").value);
-      const neTramaCO = corrigirTitulo(document.getElementById("neTramaCO").value);
-      const encTeiaCO = parseFloat(document.getElementById("encTeiaCO").value) / 100;
-      const encTramaCO = parseFloat(document.getElementById("encTramaCO").value) / 100;
-      const larguraCO = parseFloat(document.getElementById("larguraCO").value);
+function calcular() {
+  const tipo = document.getElementById("exportarTipo").value;
+  let texto = "";
 
-      const parteTeiaCO = ((fiosTeiaCO / 0.0254) + encTeiaCO) / (neTeiaCO / 0.59);
-      const parteTramaCO = ((fiosTramaCO / 0.0254) + encTramaCO) / (neTramaCO / 0.59);
-      const gramagemCO = parteTeiaCO + parteTramaCO;
-      const pesoLinearCO = gramagemCO * (larguraCO / 100);
+  // Função auxiliar para validar campos
+  function validarCampos(ids) {
+    for (let id of ids) {
+      const valor = document.getElementById(id).value.trim();
+      if (valor === "") return false;
+    }
+    return true;
+  }
 
-      // Linho
-      const fiosTeiaLI = parseFloat(document.getElementById("fiosTeiaLI").value);
-      const fiosTramaLI = parseFloat(document.getElementById("fiosTramaLI").value);
-      const nmTeiaLI = corrigirTitulo(document.getElementById("nmTeiaLI").value);
-      const nmTramaLI = corrigirTitulo(document.getElementById("nmTramaLI").value);
-      const encTeiaLI = parseFloat(document.getElementById("encTeiaLI").value) / 100;
-      const encTramaLI = parseFloat(document.getElementById("encTramaLI").value) / 100;
-      const larguraLI = parseFloat(document.getElementById("larguraLI").value);
+  const camposAlgodao = [
+    "fiosTeiaCO", "fiosTramaCO", "neTeiaCO", "neTramaCO",
+    "encTeiaCO", "encTramaCO", "larguraCO"
+  ];
+  const camposLinho = [
+    "fiosTeiaLI", "fiosTramaLI", "nmTeiaLI", "nmTramaLI",
+    "encTeiaLI", "encTramaLI", "larguraLI"
+  ];
 
-      const parteTeiaLI = ((fiosTeiaLI / 0.0254) + encTeiaLI) / nmTeiaLI;
-      const parteTramaLI = ((fiosTramaLI / 0.0254) + encTramaLI) / nmTramaLI;
-      const gramagemLI = parteTeiaLI + parteTramaLI;
-      const pesoLinearLI = gramagemLI * (larguraLI / 100);
+  if ((tipo === "algodao" || tipo === "ambos") && !validarCampos(camposAlgodao)) {
+    alert("Preencha todos os campos de Algodão antes de calcular.");
+    return;
+  }
 
-      resultados = {
-        algodao: {
-          gramagem: gramagemCO.toFixed(2),
-          pesoLinear: pesoLinearCO.toFixed(2),
-          fiosTeia: fiosTeiaCO,
-          fiosTrama: fiosTramaCO,
-          neTeia: neTeiaCO,
-          neTrama: neTramaCO,
-          encTeia: encTeiaCO * 100,
-          encTrama: encTramaCO * 100,
-          largura: larguraCO
-        },
-        linho: {
-          gramagem: gramagemLI.toFixed(2),
-          pesoLinear: pesoLinearLI.toFixed(2),
-          fiosTeia: fiosTeiaLI,
-          fiosTrama: fiosTramaLI,
-          nmTeia: nmTeiaLI,
-          nmTrama: nmTramaLI,
-          encTeia: encTeiaLI * 100,
-          encTrama: encTramaLI * 100,
-          largura: larguraLI
-        }
-      };
+  if ((tipo === "linho" || tipo === "ambos") && !validarCampos(camposLinho)) {
+    alert("Preencha todos os campos de Linho antes de calcular.");
+    return;
+  }
 
-      document.getElementById("resultado").innerHTML =
-        `Gramagem Algodão (CO): ${resultados.algodao.gramagem} g/m²<br>` +
-        `Peso Linear Algodão: ${resultados.algodao.pesoLinear} g/m<br><br>` +
-        `Gramagem Linho (LI): ${resultados.linho.gramagem} g/m²<br>` +
-        `Peso Linear Linho: ${resultados.linho.pesoLinear} g/m`;
-    }    function exportarPDF() {
+  // Cálculo Algodão
+  if (tipo !== "linho") {
+    const fiosTeiaCO = parseFloat(document.getElementById("fiosTeiaCO").value);
+    const fiosTramaCO = parseFloat(document.getElementById("fiosTramaCO").value);
+    const neTeiaCO = corrigirTitulo(document.getElementById("neTeiaCO").value);
+    const neTramaCO = corrigirTitulo(document.getElementById("neTramaCO").value);
+    const encTeiaCO = parseFloat(document.getElementById("encTeiaCO").value) / 100;
+    const encTramaCO = parseFloat(document.getElementById("encTramaCO").value) / 100;
+    const larguraCO = parseFloat(document.getElementById("larguraCO").value);
+
+    const parteTeiaCO = ((fiosTeiaCO / 0.0254) + encTeiaCO) / (neTeiaCO / 0.59);
+    const parteTramaCO = ((fiosTramaCO / 0.0254) + encTramaCO) / (neTramaCO / 0.59);
+    const gramagemCO = parteTeiaCO + parteTramaCO;
+    const pesoLinearCO = gramagemCO * (larguraCO / 100);
+
+    resultados.algodao = {
+      gramagem: gramagemCO.toFixed(2),
+      pesoLinear: pesoLinearCO.toFixed(2),
+      fiosTeia: fiosTeiaCO,
+      fiosTrama: fiosTramaCO,
+      neTeia: neTeiaCO,
+      neTrama: neTramaCO,
+      encTeia: encTeiaCO * 100,
+      encTrama: encTramaCO * 100,
+      largura: larguraCO
+    };
+
+    texto += `Gramagem Algodão (CO): ${resultados.algodao.gramagem} g/m²<br>`;
+    texto += `Peso Linear Algodão: ${resultados.algodao.pesoLinear} g/m<br><br>`;
+  }
+
+  // Cálculo Linho
+  if (tipo !== "algodao") {
+    const fiosTeiaLI = parseFloat(document.getElementById("fiosTeiaLI").value);
+    const fiosTramaLI = parseFloat(document.getElementById("fiosTramaLI").value);
+    const nmTeiaLI = corrigirTitulo(document.getElementById("nmTeiaLI").value);
+    const nmTramaLI = corrigirTitulo(document.getElementById("nmTramaLI").value);
+    const encTeiaLI = parseFloat(document.getElementById("encTeiaLI").value) / 100;
+    const encTramaLI = parseFloat(document.getElementById("encTramaLI").value) / 100;
+    const larguraLI = parseFloat(document.getElementById("larguraLI").value);
+
+    const parteTeiaLI = ((fiosTeiaLI / 0.0254) + encTeiaLI) / nmTeiaLI;
+    const parteTramaLI = ((fiosTramaLI / 0.0254) + encTramaLI) / nmTramaLI;
+    const gramagemLI = parteTeiaLI + parteTramaLI;
+    const pesoLinearLI = gramagemLI * (larguraLI / 100);
+
+    resultados.linho = {
+      gramagem: gramagemLI.toFixed(2),
+      pesoLinear: pesoLinearLI.toFixed(2),
+      fiosTeia: fiosTeiaLI,
+      fiosTrama: fiosTramaLI,
+      nmTeia: nmTeiaLI,
+      nmTrama: nmTramaLI,
+      encTeia: encTeiaLI * 100,
+      encTrama: encTramaLI * 100,
+      largura: larguraLI
+    };
+
+    texto += `Gramagem Linho (LI): ${resultados.linho.gramagem} g/m²<br>`;
+    texto += `Peso Linear Linho: ${resultados.linho.pesoLinear} g/m`;
+  }
+
+  document.getElementById("resultado").innerHTML = texto;
+}
+
+function exportarPDF() {
   const tipo = document.getElementById("exportarTipo").value;
   const nomeProjeto = document.getElementById("nomeProjeto").value.trim();
+
+  // Se estiver vazio, usa título padrão
   const tituloProjeto = nomeProjeto !== "" ? nomeProjeto : "Projeto: Cálculo de Gramagem e Peso Linear";
 
   const { jsPDF } = window.jspdf;
@@ -133,59 +186,59 @@
   doc.setFontSize(14);
   doc.text(tituloProjeto, 20, 20);
 
-      const tabelas = [];
+    const tabelas = [];
 
-      if (tipo === "algodao" || tipo === "ambos") {
-        tabelas.push({
-          title: "Algodão (CO)",
-          head: [["Fios Teia", "Fios Trama", "Ne Teia", "Ne Trama", "Enc. Teia (%)", "Enc. Trama (%)", "Largura (cm)", "Gramagem (g/m²)", "Peso Linear (g/m)"]],
-          body: [[
-            resultados.algodao.fiosTeia,
-            resultados.algodao.fiosTrama,
-            resultados.algodao.neTeia,
-            resultados.algodao.neTrama,
-            resultados.algodao.encTeia,
-            resultados.algodao.encTrama,
-            resultados.algodao.largura,
-            resultados.algodao.gramagem,
-            resultados.algodao.pesoLinear
-          ]]
-        });
-      }
-
-      if (tipo === "linho" || tipo === "ambos") {
-        tabelas.push({
-          title: "Linho (LI)",
-          head: [["Fios Teia", "Fios Trama", "Nm Teia", "Nm Trama", "Enc. Teia (%)", "Enc. Trama (%)", "Largura (cm)", "Gramagem (g/m²)", "Peso Linear (g/m)"]],
-          body: [[
-            resultados.linho.fiosTeia,
-            resultados.linho.fiosTrama,
-            resultados.linho.nmTeia,
-            resultados.linho.nmTrama,
-            resultados.linho.encTeia,
-            resultados.linho.encTrama,
-            resultados.linho.largura,
-            resultados.linho.gramagem,
-            resultados.linho.pesoLinear
-          ]]
-        });
-      }
-
-      let y = 30;
-      tabelas.forEach(tabela => {
-        doc.text(tabela.title, 20, y);
-        doc.autoTable({
-          startY: y + 5,
-          head: tabela.head,
-          body: tabela.body,
-          theme: 'grid',
-          styles: { fontSize: 10 }
-        });
-        y = doc.lastAutoTable.finalY + 10;
+    if (tipo === "algodao" || tipo === "ambos") {
+      tabelas.push({
+        title: "Algodão (CO)",
+        head: [["Fios Teia", "Fios Trama", "Ne Teia", "Ne Trama", "Enc. Teia (%)", "Enc. Trama (%)", "Largura (cm)", "Gramagem (g/m²)", "Peso Linear (g/m)"]],
+        body: [[
+          resultados.algodao.fiosTeia,
+          resultados.algodao.fiosTrama,
+          resultados.algodao.neTeia,
+          resultados.algodao.neTrama,
+          resultados.algodao.encTeia,
+          resultados.algodao.encTrama,
+          resultados.algodao.largura,
+          resultados.algodao.gramagem,
+          resultados.algodao.pesoLinear
+        ]]
       });
-
-      doc.save("calculo_gramagem_peso_linear.pdf");
     }
-  </script>
+
+    if (tipo === "linho" || tipo === "ambos") {
+      tabelas.push({
+        title: "Linho (LI)",
+        head: [["Fios Teia", "Fios Trama", "Nm Teia", "Nm Trama", "Enc. Teia (%)", "Enc. Trama (%)", "Largura (cm)", "Gramagem (g/m²)", "Peso Linear (g/m)"]],
+        body: [[
+          resultados.linho.fiosTeia,
+          resultados.linho.fiosTrama,
+          resultados.linho.nmTeia,
+          resultados.linho.nmTrama,
+          resultados.linho.encTeia,
+          resultados.linho.encTrama,
+          resultados.linho.largura,
+          resultados.linho.gramagem,
+          resultados.linho.pesoLinear
+        ]]
+      });
+    }
+
+    let y = 30;
+    tabelas.forEach(tabela => {
+      doc.text(tabela.title, 20, y);
+      doc.autoTable({
+        startY: y + 5,
+        head: tabela.head,
+        body: tabela.body,
+        theme: 'grid',
+        styles: { fontSize: 10 }
+      });
+      y = doc.lastAutoTable.finalY + 10;
+    });
+
+    doc.save("calculo_gramagem_peso_linear.pdf");
+  }
+</script>
 </body>
 </html>
