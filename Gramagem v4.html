@@ -6,40 +6,87 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
   <style>
-    body {
-      font-family: Arial;
-      background: #f9f9f9;
+body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
       padding: 20px;
     }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .logo {
+      max-width: 120px;
+      height: auto;
+      margin-bottom: 10px;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 2em;
+      color: #333;
+    }
+
+    .header p {
+      font-size: 1em;
+      color: #666;
+    }
+
     .container {
-      background: #fff;
+      background-color: #fff;
       padding: 20px;
       border-radius: 8px;
-      max-width: 800px;
-      margin: auto;
+      max-width: 500px;
+      margin: 0 auto;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
+
     label {
       display: block;
-      margin-top: 10px;
-    }
-    input, select {
-      width: 120px;
-      padding: 5px;
-      margin-right: 10px;
-    }
-    .result {
-      margin-top: 20px;
-      font-weight: bold;
-      font-size: 1.2em;
-    }
-    button {
       margin-top: 15px;
-      padding: 8px 16px;
+      font-weight: bold;
     }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 15px;
+      background-color: #0078D7;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #005a9e;
+    }
+
+    .resultado {
+      margin-top: 20px;
+      font-size: 1.2em;
+      color: #333;
+    }
+
   </style>
+  
 </head>
+
 <body>
+<div class="header">
+  <img src="data:image/jpeg;base64,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" alt="Logo ou imagem" class="logo">
+ 
+</div>
+
   <div class="container">
     <h1>Calculadora de Gramagem e Peso Linear</h1>
 
@@ -247,3 +294,4 @@ document.getElementById("resultado").innerHTML = resultadoTexto;
   </script>
 </body>
 </html>
+
