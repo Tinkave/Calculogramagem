@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Gramagem - Tinkave</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            padding: 40px;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 20px;
+        }
+
+        .logo {
+            width: 80px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            background: #f0f4ff;
+            padding: 12px;
+            border-radius: 8px;
+            color: #555;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 30px 0;
+        }
+
+        button {
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-calculate {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            grid-column: 1 / -1;
+        }
+
+        .btn-calculate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-calculate:active {
+            transform: translateY(0);
+        }
+
+        .btn-clear {
+            background: #f5f5f5;
+            color: #666;
+            border: 2px solid #e0e0e0;
+        }
+
+        .btn-clear:hover {
+            background: #eeeeee;
+            border-color: #d0d0d0;
+        }
+
+        .btn-pdf {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-pdf:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(220, 53, 69, 0.3);
+        }
+
+        .btn-pdf:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .results {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .results.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .result-item {
+            margin-bottom: 15px;
+        }
+
+        .result-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .result-label {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .result-value {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #667eea;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 20px;
+            color: #1565c0;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .error {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+            padding: 12px;
+            border-radius: 4px;
+            color: #c62828;
+            font-size: 13px;
+            display: none;
+            margin-bottom: 15px;
+        }
+
+        .error.active {
+            display: block;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            color: #999;
+            font-size: 12px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Estilos para PDF */
+        @media print {
+            body {
+                background: white;
+            }
+
+            .container {
+                box-shadow: none;
+                padding: 0;
+                max-width: 100%;
+            }
+
+            .button-group,
+            .btn-calculate,
+            .btn-clear,
+            .btn-pdf,
+            .footer {
+                display: none !important;
+            }
+        }
+
+        /* Conteúdo do PDF */
+        #pdf-content {
+            display: none;
+        }
+
+        #pdf-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://www.dropbox.com/scl/fi/v8hmjb4yod0tt71ucm9px/tinkave-logo.png?rlkey=2fw9bk40kchsjkdjfk5g6spur&e=2&dl=1" alt="Tinkave Logo" class="logo">
+            <h1>Calculadora de Gramagem</h1>
+            <p class="subtitle">Tinkave</p>
+            <div class="description">
+                Calcule a gramagem (g/m²) de telas e tecidos com precisão
+            </div>
+        </div>
+
+        <div class="error" id="error-msg"></div>
+
+        <form id="calculatorForm">
+            <div class="form-group">
+                <label for="largura">Largura do Tecido (cm)</label>
+                <input type="number" id="largura" placeholder="Ex: 150" step="0.01" min="0" required>
+            </div>
+
+            <div class="form-group">
+                <label for="comprimento">Comprimento do Tecido (m)</label>
+                <input type="number" id="comprimento" placeholder="Ex: 1" step="0.01" min="0" required>
+            </div>
+
+            <div class="form-group">
+                <label for="peso">Peso do Tecido (kg)</label>
+                <input type="number" id="peso" placeholder="Ex: 0.5" step="0.001" min="0" required>
+            </div>
+
+            <div class="button-group">
+                <button type="button" class="btn-calculate" onclick="calcular()">Calcular</button>
+                <button type="button" class="btn-clear" onclick="limpar()">Limpar</button>
+                <button type="button" class="btn-pdf" id="btnPDF" onclick="exportarPDF()" disabled>📥 Exportar PDF</button>
+            </div>
+        </form>
+
+        <div class="results" id="results">
+            <div class="result-item">
+                <div class="result-label">Área Total</div>
+                <div class="result-value"><span id="area">0</span> m²</div>
+            </div>
+
+            <div class="result-item">
+                <div class="result-label">Gramagem (g/m²)</div>
+                <div class="result-value"><span id="gramagem">0</span> g/m²</div>
+            </div>
+
+            <div class="result-item">
+                <div class="result-label">Peso por Metro Linear</div>
+                <div class="result-value"><span id="pesoLinear">0</span> g/m</div>
+            </div>
+
+            <div class="info-box">
+                ℹ️ <strong>Dica:</strong> Gramagem é o peso do tecido por metro quadrado. Valores típicos variam de 80 a 300 g/m².
+            </div>
+        </div>
+
+        <div class="footer">
+            Calculadora de Gramagem © 2026 Tinkave
+        </div>
+    </div>
+
+    <!-- Conteúdo oculto para PDF -->
+    <div id="pdf-content">
+        <div style="font-family: Arial, sans-serif; padding: 40px; max-width: 800px; margin: 0 auto;">
+            <div style="text-align: center; margin-bottom: 40px; border-bottom: 3px solid #667eea; padding-bottom: 20px;">
+                <img src="https://www.dropbox.com/scl/fi/v8hmjb4yod0tt71ucm9px/tinkave-logo.png?rlkey=2fw9bk40kchsjkdjfk5g6spur&e=2&dl=1" alt="Tinkave Logo" style="width: 100px; height: auto; margin-bottom: 20px;">
+                <h1 style="color: #333; margin: 0; font-size: 28px;">Relatório de Gramagem</h1>
+                <p style="color: #666; margin: 10px 0 0 0;">Tinkave - Cálculo de Telas e Tecidos</p>
+            </div>
+
+            <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+                <h2 style="color: #667eea; font-size: 16px; margin-top: 0; margin-bottom: 15px;">DADOS DE ENTRADA</h2>
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="padding: 10px; border-bottom: 1px solid #ddd; color: #666;"><strong>Largura:</strong></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #ddd; color: #333;"><span id="pdf-largura">-</span> cm</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; border-bottom: 1px solid #ddd; color: #666;"><strong>Comprimento:</strong></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #ddd; color: #333;"><span id="pdf-comprimento">-</span> m</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px; color: #666;"><strong>Peso:</strong></td>
+                        <td style="padding: 10px; color: #333;"><span id="pdf-peso">-</span> kg</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 8px; color: white; margin-bottom: 30px;">
+                <h2 style="margin-top: 0; margin-bottom: 20px; font-size: 18px;">RESULTADOS</h2>
+                
+                <div style="margin-bottom: 20px; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 6px;">
+                    <p style="margin: 0 0 5px 0; font-size: 13px; opacity: 0.9;">Área Total</p>
+                    <p style="margin: 0; font-size: 24px; font-weight: bold;"><span id="pdf-area">-</span> m²</p>
+                </div>
+
+                <div style="margin-bottom: 20px; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 6px;">
+                    <p style="margin: 0 0 5px 0; font-size: 13px; opacity: 0.9;">Gramagem</p>
+                    <p style="margin: 0; font-size: 24px; font-weight: bold;"><span id="pdf-gramagem">-</span> g/m²</p>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 6px;">
+                    <p style="margin: 0 0 5px 0; font-size: 13px; opacity: 0.9;">Peso por Metro Linear</p>
+                    <p style="margin: 0; font-size: 24px; font-weight: bold;"><span id="pdf-pesoLinear">-</span> g/m</p>
+                </div>
+            </div>
+
+            <div style="background: #e3f2fd; border-left: 4px solid #2196F3; padding: 15px; border-radius: 4px; color: #1565c0; font-size: 12px; line-height: 1.6;">
+                <strong>Informações:</strong><br>
+                Gramagem é o peso do tecido por metro quadrado (g/m²). Este é um parâmetro importante para definir a espessura e qualidade do tecido. Valores típicos variam de 80 a 300 g/m².
+            </div>
+
+            <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; color: #999; font-size: 11px;">
+                <p>Gerado por: Calculadora de Gramagem Tinkave<br>Data: <span id="pdf-data"></span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calcular() {
+            const errorMsg = document.getElementById('error-msg');
+            errorMsg.classList.remove('active');
+
+            const largura = parseFloat(document.getElementById('largura').value);
+            const comprimento = parseFloat(document.getElementById('comprimento').value);
+            const peso = parseFloat(document.getElementById('peso').value);
+
+            // Validação
+            if (!largura || !comprimento || !peso) {
+                errorMsg.textContent = '⚠️ Por favor, preencha todos os campos com valores válidos';
+                errorMsg.classList.add('active');
+                document.getElementById('results').classList.remove('active');
+                document.getElementById('btnPDF').disabled = true;
+                return;
+            }
+
+            if (largura <= 0 || comprimento <= 0 || peso <= 0) {
+                errorMsg.textContent = '⚠️ Todos os valores devem ser maiores que zero';
+                errorMsg.classList.add('active');
+                document.getElementById('results').classList.remove('active');
+                document.getElementById('btnPDF').disabled = true;
+                return;
+            }
+
+            // Cálculos
+            const larguraM = largura / 100; // Converter cm para m
+            const area = larguraM * comprimento;
+            const pesoG = peso * 1000; // Converter kg para g
+            const gramagem = pesoG / area;
+            const pesoLinear = (peso * 100) / comprimento; // g/m
+
+            // Formatação
+            const areaFormatada = area.toFixed(4);
+            const gramegemFormatada = gramagem.toFixed(2);
+            const pesoLinearFormatada = pesoLinear.toFixed(2);
+
+            // Atualizar resultados
+            document.getElementById('area').textContent = areaFormatada;
+            document.getElementById('gramagem').textContent = gramegemFormatada;
+            document.getElementById('pesoLinear').textContent = pesoLinearFormatada;
+
+            // Atualizar dados para PDF
+            document.getElementById('pdf-largura').textContent = largura.toFixed(2);
+            document.getElementById('pdf-comprimento').textContent = comprimento.toFixed(2);
+            document.getElementById('pdf-peso').textContent = peso.toFixed(3);
+            document.getElementById('pdf-area').textContent = areaFormatada;
+            document.getElementById('pdf-gramagem').textContent = gramegemFormatada;
+            document.getElementById('pdf-pesoLinear').textContent = pesoLinearFormatada;
+
+            // Mostrar resultados
+            document.getElementById('results').classList.add('active');
+            document.getElementById('btnPDF').disabled = false;
+        }
+
+        function limpar() {
+            document.getElementById('calculatorForm').reset();
+            document.getElementById('results').classList.remove('active');
+            document.getElementById('error-msg').classList.remove('active');
+            document.getElementById('btnPDF').disabled = true;
+        }
+
+        function exportarPDF() {
+            const element = document.getElementById('pdf-content');
+            const data = new Date();
+            const dataFormatada = `${data.getDate().toString().padStart(2, '0')}/${(data.getMonth() + 1).toString().padStart(2, '0')}/${data.getFullYear()} às ${data.getHours().toString().padStart(2, '0')}:${data.getMinutes().toString().padStart(2, '0')}`;
+            
+            document.getElementById('pdf-data').textContent = dataFormatada;
+
+            const opt = {
+                margin: 10,
+                filename: `Relatorio_Gramagem_${data.getTime()}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' }
+            };
+
+            html2pdf().set(opt).from(element).save();
+        }
+
+        // Permitir Enter para calcular
+        document.getElementById('calculatorForm').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                calcular();
+            }
+        });
+    </script>
+</body>
+</html>
