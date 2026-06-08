@@ -3,346 +3,412 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculadora Têxtil</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: var(--font-sans, system-ui, sans-serif); color: var(--color-text-primary); background: transparent; padding: 1rem 0.5rem 2rem; }
-  h1 { font-size: 20px; font-weight: 500; margin-bottom: 0.25rem; }
-  .subtitle { font-size: 14px; color: var(--color-text-secondary); margin-bottom: 1.5rem; }
-  .tabs { display: flex; gap: 4px; border-bottom: 0.5px solid var(--color-border-tertiary); margin-bottom: 1.5rem; flex-wrap: wrap; }
-  .tab { padding: 8px 16px; font-size: 14px; font-weight: 400; border: none; background: transparent; color: var(--color-text-secondary); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -0.5px; transition: color 0.15s; }
-  .tab.active { color: var(--color-text-primary); border-bottom-color: var(--color-text-primary); font-weight: 500; }
-  .tab:hover:not(.active) { color: var(--color-text-primary); }
-  .panel { display: none; }
-  .panel.active { display: block; }
-  .card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.25rem; margin-bottom: 1rem; }
-  .section-title { font-size: 15px; font-weight: 500; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
-  .section-title span.tag { font-size: 11px; font-weight: 400; background: var(--color-background-secondary); color: var(--color-text-secondary); padding: 2px 8px; border-radius: 4px; }
-  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
-  .field { display: flex; flex-direction: column; gap: 4px; }
-  .field label { font-size: 12px; color: var(--color-text-secondary); }
-  .field input, .field select { width: 100%; padding: 7px 10px; font-size: 14px; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); background: var(--color-background-secondary); color: var(--color-text-primary); }
-  .field input:focus, .field select:focus { outline: none; border-color: var(--color-border-primary); }
-  .field.full { grid-column: 1 / -1; }
-  .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 1rem; }
-  .result-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 1rem; }
-  .result-card .label { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px; }
-  .result-card .value { font-size: 22px; font-weight: 500; }
-  .result-card .unit { font-size: 13px; color: var(--color-text-secondary); font-weight: 400; }
-  .btn-row { display: flex; gap: 8px; margin-top: 1rem; flex-wrap: wrap; }
-  button.calc { padding: 8px 20px; font-size: 14px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: transparent; color: var(--color-text-primary); cursor: pointer; }
-  button.calc:hover { background: var(--color-background-secondary); }
-  button.calc.primary { background: var(--color-text-primary); color: var(--color-background-primary); border-color: var(--color-text-primary); }
-  button.calc.primary:hover { opacity: 0.85; }
-  .divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 1rem 0; }
-  .tipo-row { display: flex; gap: 8px; margin-bottom: 1rem; flex-wrap: wrap; }
-  .tipo-btn { padding: 6px 14px; font-size: 13px; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); background: transparent; color: var(--color-text-secondary); cursor: pointer; }
-  .tipo-btn.active { border-color: var(--color-border-primary); color: var(--color-text-primary); background: var(--color-background-secondary); font-weight: 500; }
-  .note { font-size: 12px; color: var(--color-text-secondary); margin-top: 8px; font-style: italic; }
-  .conv-table { width: 100%; border-collapse: collapse; margin-top: 0.75rem; font-size: 14px; }
-  .conv-table td { padding: 8px 10px; border-bottom: 0.5px solid var(--color-border-tertiary); }
-  .conv-table td:first-child { color: var(--color-text-secondary); font-size: 12px; }
-  .conv-table td:last-child { font-weight: 500; text-align: right; }
-  .error { color: var(--color-text-danger, #c0392b); font-size: 13px; margin-top: 6px; }
-  @media (max-width: 480px) {
-    .grid2, .grid3 { grid-template-columns: 1fr; }
-    .result-grid { grid-template-columns: 1fr; }
-  }
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#1a1a1a;--ink2:#555;--ink3:#888;
+  --surface:#fff;--surface2:#f7f6f4;--surface3:#f0ede8;
+  --border:#e2ddd7;--border2:#c8c0b5;
+  --accent:#2c4a3e;--accent2:#3d6b5c;--accent-light:#e8f0ed;
+  --gold:#8b6914;--gold-light:#fdf6e3;
+  --radius:10px;--radius-sm:6px;
+}
+body{font-family:'Georgia',serif;color:var(--ink);background:var(--surface2);min-height:100vh;padding:0}
+
+/* TOP HEADER */
+.app-header{background:var(--accent);color:#fff;padding:1.5rem 1.75rem 1.25rem;position:relative;overflow:hidden}
+.app-header::after{content:'';position:absolute;right:-40px;top:-40px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.05)}
+.app-header::before{content:'';position:absolute;right:60px;bottom:-60px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.04)}
+.app-header h1{font-size:22px;font-weight:400;letter-spacing:.04em;margin-bottom:3px;position:relative}
+.app-header p{font-size:12px;color:rgba(255,255,255,.6);letter-spacing:.08em;text-transform:uppercase;font-family:system-ui,sans-serif;position:relative}
+
+/* TABS */
+.tabs-wrap{background:var(--accent);padding:0 1.75rem;border-bottom:1px solid rgba(255,255,255,.12)}
+.tabs{display:flex;gap:0}
+.tab{padding:11px 18px;font-size:12px;font-weight:400;font-family:system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;border:none;background:transparent;color:rgba(255,255,255,.5);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s}
+.tab.active{color:#fff;border-bottom-color:#fff}
+.tab:hover:not(.active){color:rgba(255,255,255,.8)}
+
+/* BODY */
+.app-body{padding:1.5rem 1.25rem 3rem;display:flex;flex-direction:column;gap:1.25rem;max-width:720px;margin:0 auto}
+
+.panel{display:none;flex-direction:column;gap:1.25rem}
+.panel.active{display:flex}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.card-head{padding:.875rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-head h3{font-size:13px;font-weight:400;letter-spacing:.07em;text-transform:uppercase;color:var(--ink2);font-family:system-ui,sans-serif}
+.badge{font-size:10px;font-family:system-ui,sans-serif;padding:3px 9px;border-radius:20px;background:var(--accent-light);color:var(--accent);letter-spacing:.05em;font-weight:500;border:1px solid rgba(44,74,62,.15)}
+.card-body{padding:1.25rem}
+
+/* TIPO SELECTOR */
+.tipo-row{display:flex;gap:6px;flex-wrap:wrap}
+.tipo-btn{padding:7px 16px;font-size:12px;font-family:system-ui,sans-serif;letter-spacing:.04em;border:1px solid var(--border2);border-radius:20px;background:transparent;color:var(--ink3);cursor:pointer;transition:all .2s}
+.tipo-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.tipo-btn:hover:not(.active){border-color:var(--accent);color:var(--accent)}
+
+/* FORM */
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:11px;font-family:system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3)}
+.field input,.field select{width:100%;padding:9px 12px;font-size:14px;font-family:'Georgia',serif;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface2);color:var(--ink);transition:border .2s}
+.field input:focus,.field select:focus{outline:none;border-color:var(--accent2);background:#fff}
+.field input[readonly]{background:var(--accent-light);border-color:rgba(44,74,62,.25);color:var(--accent);font-weight:400}
+.field.out label{color:var(--accent);letter-spacing:.06em}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.full{grid-column:1/-1}
+
+/* SUBSECTIONS */
+.sub{padding:1rem 1.25rem}
+.sub+.sub{border-top:1px solid var(--border)}
+.sub-label{font-size:10px;font-family:system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:.75rem;display:flex;align-items:center;gap:8px}
+.sub-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* RESULTS */
+.results-wrap{background:var(--surface2);border-top:1px solid var(--border);padding:1.25rem}
+.results-title{font-size:10px;font-family:system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.results-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.rcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.125rem}
+.rcard.gold{background:var(--gold-light);border-color:rgba(139,105,20,.25)}
+.rcard .rlabel{font-size:11px;font-family:system-ui,sans-serif;letter-spacing:.04em;color:var(--ink3);margin-bottom:6px;line-height:1.4}
+.rcard .rval{font-size:24px;font-weight:400;line-height:1;color:var(--ink)}
+.rcard.gold .rval{color:var(--gold)}
+.rcard .runit{font-size:12px;color:var(--ink3);margin-top:4px;font-family:system-ui,sans-serif}
+
+/* BUTTONS */
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;padding:1rem 1.25rem;border-top:1px solid var(--border)}
+.btn{padding:9px 22px;font-size:12px;font-family:system-ui,sans-serif;letter-spacing:.07em;text-transform:uppercase;border-radius:var(--radius-sm);cursor:pointer;transition:all .2s;border:1px solid}
+.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn.primary:hover{background:var(--accent2)}
+.btn.ghost{background:transparent;color:var(--ink2);border-color:var(--border2)}
+.btn.ghost:hover{border-color:var(--accent);color:var(--accent)}
+
+.error{font-size:13px;color:#8b2a2a;padding:.5rem 1.25rem;font-family:system-ui,sans-serif}
+
+/* CONVERSION TABLE */
+.conv-table{width:100%;border-collapse:collapse;font-family:system-ui,sans-serif}
+.conv-table thead tr{background:var(--surface2)}
+.conv-table th{text-align:left;padding:9px 14px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);border-bottom:1px solid var(--border);font-weight:500}
+.conv-table td{padding:11px 14px;border-bottom:1px solid var(--border);font-size:14px;color:var(--ink2)}
+.conv-table td:last-child{font-size:18px;font-family:'Georgia',serif;color:var(--ink);text-align:right}
+.conv-table tr.origin{background:var(--accent-light)}
+.conv-table tr.origin td{color:var(--accent)}
+.conv-table tr.origin td:last-child{color:var(--accent)}
+.conv-table tr:last-child td{border-bottom:none}
+.origin-tag{font-size:10px;letter-spacing:.05em;background:var(--accent);color:#fff;padding:2px 7px;border-radius:10px;margin-left:6px;vertical-align:middle}
+
+/* QUICK CALCS */
+.qrow{display:grid;grid-template-columns:1fr 1fr 32px 1fr;gap:12px;align-items:end}
+.arrow{display:flex;align-items:center;justify-content:center;height:38px;color:var(--border2);font-size:20px;font-family:system-ui,sans-serif}
+
+.note{font-size:12px;color:var(--ink3);margin-top:10px;font-style:italic;font-family:system-ui,sans-serif;line-height:1.5}
+
+/* PROJECT FIELD */
+.project-input{width:100%;padding:10px 14px;font-size:16px;font-family:'Georgia',serif;border:none;border-bottom:1.5px solid var(--border2);border-radius:0;background:transparent;color:var(--ink)}
+.project-input:focus{outline:none;border-bottom-color:var(--accent)}
+.project-input::placeholder{color:var(--ink3)}
+
+@media(max-width:520px){
+  .grid2,.grid3{grid-template-columns:1fr}
+  .qrow{grid-template-columns:1fr 1fr}
+  .arrow{display:none}
+  .result-grid{grid-template-columns:1fr 1fr}
+  .tab{padding:10px 12px;font-size:11px}
+}
 </style>
 </head>
 <body>
-<h1>Calculadora Têxtil</h1>
-<p class="subtitle">Gramagem · Peso linear · Conversão de títulos · Metragem · Peso total</p>
 
-<div class="tabs">
-  <button class="tab active" onclick="showTab('gramagem')">Gramagem / Peso linear</button>
-  <button class="tab" onclick="showTab('conversao')">Conversão de títulos</button>
-  <button class="tab" onclick="showTab('rapidos')">Cálculos rápidos</button>
+<div class="app-header">
+  <img src="data:image/png;base64,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
+  <h1>Calculadora Têxtil</h1>
+  <p>Gramagem · Peso linear · Conversão de títulos</p>
 </div>
 
-<!-- PANEL 1: Gramagem -->
+<div class="tabs-wrap">
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('gramagem')">Gramagem</button>
+    <button class="tab" onclick="showTab('conversao')">Títulos</button>
+    <button class="tab" onclick="showTab('rapidos')">Cálculos rápidos</button>
+  </div>
+</div>
+
+<div class="app-body">
+
+<!-- ===== GRAMAGEM ===== -->
 <div class="panel active" id="tab-gramagem">
+
   <div class="card">
-    <div class="field" style="margin-bottom:1rem;">
-      <label>Nome do projeto</label>
-      <input type="text" id="nome-projeto" placeholder="Ex.: Tecido algodão/linho 2024">
-    </div>
-    <div class="field" style="margin-bottom:1rem;">
-      <label>Tipo de cálculo</label>
-      <div class="tipo-row">
-        <button class="tipo-btn active" id="tipo-ambos" onclick="setTipo('ambos')">Algodão + Linho</button>
-        <button class="tipo-btn" id="tipo-algodao" onclick="setTipo('algodao')">Somente Algodão</button>
-        <button class="tipo-btn" id="tipo-linho" onclick="setTipo('linho')">Somente Linho</button>
+    <div class="card-head"><h3>Projeto</h3></div>
+    <div class="card-body" style="display:flex;flex-direction:column;gap:1.125rem">
+      <input class="project-input" type="text" id="nome-projeto" placeholder="Nome do projeto…">
+      <div class="field">
+        <label>Tipo de cálculo</label>
+        <div class="tipo-row" style="margin-top:4px">
+          <button class="tipo-btn active" id="tipo-ambos" onclick="setTipo('ambos')">Algodão + Linho</button>
+          <button class="tipo-btn" id="tipo-algodao" onclick="setTipo('algodao')">Somente Algodão</button>
+          <button class="tipo-btn" id="tipo-linho" onclick="setTipo('linho')">Somente Linho</button>
+        </div>
       </div>
     </div>
   </div>
 
   <div class="card" id="bloco-algodao">
-    <div class="section-title">Algodão <span class="tag">Ne</span></div>
-    <div class="grid2">
-      <div class="field"><label>Fios teia (fios/cm)</label><input type="number" id="al-ft" placeholder="0" step="any" min="0"></div>
-      <div class="field"><label>Fios trama (fios/cm)</label><input type="number" id="al-ftr" placeholder="0" step="any" min="0"></div>
-      <div class="field"><label>Ne teia</label><input type="number" id="al-net" placeholder="0" step="any" min="0"></div>
-      <div class="field"><label>Ne trama</label><input type="number" id="al-netr" placeholder="0" step="any" min="0"></div>
-      <div class="field"><label>Encolhimento teia (%)</label><input type="number" id="al-et" placeholder="0" step="any" min="0" max="100"></div>
-      <div class="field"><label>Encolhimento trama (%)</label><input type="number" id="al-etr" placeholder="0" step="any" min="0" max="100"></div>
-      <div class="field full"><label>Largura da tela (cm)</label><input type="number" id="al-larg" placeholder="0" step="any" min="0"></div>
+    <div class="card-head"><h3>Algodão</h3><span class="badge">Ne</span></div>
+    <div class="sub">
+      <div class="sub-label">Teia</div>
+      <div class="grid3">
+        <div class="field"><label>Fios/cm</label><input type="number" id="al-ft" placeholder="0" step="any" min="0"></div>
+        <div class="field"><label>Ne</label><input type="number" id="al-net" placeholder="0" step="any" min="0"></div>
+        <div class="field"><label>Encolhimento %</label><input type="number" id="al-et" placeholder="0" step="any" min="0" max="100"></div>
+      </div>
+    </div>
+    <div class="sub">
+      <div class="sub-label">Trama</div>
+      <div class="grid3">
+        <div class="field"><label>Fios/cm</label><input type="number" id="al-ftr" placeholder="0" step="any" min="0"></div>
+        <div class="field"><label>Ne</label><input type="number" id="al-netr" placeholder="0" step="any" min="0"></div>
+        <div class="field"><label>Encolhimento %</label><input type="number" id="al-etr" placeholder="0" step="any" min="0" max="100"></div>
+      </div>
+    </div>
+    <div class="sub">
+      <div class="field" style="max-width:220px"><label>Largura da tela (cm)</label><input type="number" id="al-larg" placeholder="0" step="any" min="0"></div>
     </div>
   </div>
 
   <div class="card" id="bloco-linho">
-    <div class="section-title">Linho <span class="tag">Nm</span></div>
-    <div class="grid2">
-      <div class="field"><label>Fios teia (fios/cm)</label><input type="number" id="li-ft" placeholder="0" step="any" min="0"></div>
-      <div class="field"><label>Fios trama (fios/cm)</label><input type="number" id="li-ftr" placeholder="0" step="any" min="0"></div>
-      <div class="field"><label>Nm teia</label><input type="number" id="li-nmt" placeholder="0" step="any" min="0"></div>
-      <div class="field"><label>Nm trama</label><input type="number" id="li-nmtr" placeholder="0" step="any" min="0"></div>
-      <div class="field"><label>Encolhimento teia (%)</label><input type="number" id="li-et" placeholder="0" step="any" min="0" max="100"></div>
-      <div class="field"><label>Encolhimento trama (%)</label><input type="number" id="li-etr" placeholder="0" step="any" min="0" max="100"></div>
-      <div class="field full"><label>Largura da tela (cm)</label><input type="number" id="li-larg" placeholder="0" step="any" min="0"></div>
+    <div class="card-head"><h3>Linho</h3><span class="badge">Nm</span></div>
+    <div class="sub">
+      <div class="sub-label">Teia</div>
+      <div class="grid3">
+        <div class="field"><label>Fios/cm</label><input type="number" id="li-ft" placeholder="0" step="any" min="0"></div>
+        <div class="field"><label>Nm</label><input type="number" id="li-nmt" placeholder="0" step="any" min="0"></div>
+        <div class="field"><label>Encolhimento %</label><input type="number" id="li-et" placeholder="0" step="any" min="0" max="100"></div>
+      </div>
+    </div>
+    <div class="sub">
+      <div class="sub-label">Trama</div>
+      <div class="grid3">
+        <div class="field"><label>Fios/cm</label><input type="number" id="li-ftr" placeholder="0" step="any" min="0"></div>
+        <div class="field"><label>Nm</label><input type="number" id="li-nmtr" placeholder="0" step="any" min="0"></div>
+        <div class="field"><label>Encolhimento %</label><input type="number" id="li-etr" placeholder="0" step="any" min="0" max="100"></div>
+      </div>
+    </div>
+    <div class="sub">
+      <div class="field" style="max-width:220px"><label>Largura da tela (cm)</label><input type="number" id="li-larg" placeholder="0" step="any" min="0"></div>
     </div>
   </div>
 
-  <div id="gram-error" class="error"></div>
-  <div class="btn-row">
-    <button class="calc primary" onclick="calcGramagem()">Calcular</button>
-    <button class="calc" onclick="limparGramagem()">Limpar</button>
-    <button class="calc" onclick="exportPDF()">Exportar PDF</button>
-  </div>
-
-  <div id="gram-results" style="display:none;">
-    <hr class="divider">
-    <div class="result-grid" id="gram-result-grid"></div>
+  <div class="card">
+    <div class="btn-row" style="border-top:none">
+      <button class="btn primary" onclick="calcGramagem()">Calcular</button>
+      <button class="btn ghost" onclick="limparGramagem()">Limpar</button>
+      <button class="btn ghost" onclick="exportPDF()">Exportar PDF</button>
+    </div>
+    <div id="gram-error" class="error"></div>
+    <div id="gram-results" style="display:none">
+      <div class="results-wrap">
+        <div class="results-title">Resultados</div>
+        <div class="result-grid" id="gram-result-grid"></div>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- PANEL 2: Conversão de Títulos -->
+<!-- ===== CONVERSÃO ===== -->
 <div class="panel" id="tab-conversao">
   <div class="card">
-    <div class="section-title">Conversão de títulos de fio</div>
-    <div class="grid2">
-      <div class="field">
-        <label>Valor do título</label>
-        <input type="number" id="conv-val" placeholder="Ex.: 30" step="any" min="0" oninput="calcConversao()">
+    <div class="card-head"><h3>Conversão de títulos de fio</h3></div>
+    <div class="card-body" style="display:flex;flex-direction:column;gap:1rem">
+      <div class="grid2">
+        <div class="field">
+          <label>Valor do título</label>
+          <input type="number" id="conv-val" placeholder="Ex.: 30" step="any" min="0" oninput="calcConversao()">
+        </div>
+        <div class="field">
+          <label>Unidade de origem</label>
+          <select id="conv-unit" onchange="calcConversao()">
+            <option value="Ne">Ne — inglês (cotton)</option>
+            <option value="Nm">Nm — métrico</option>
+            <option value="Denier">Denier (Den)</option>
+            <option value="Tex">Tex</option>
+            <option value="Dtex">Dtex</option>
+          </select>
+        </div>
       </div>
-      <div class="field">
-        <label>Unidade de origem</label>
-        <select id="conv-unit" onchange="calcConversao()">
-          <option value="Ne">Ne (inglês / cotton)</option>
-          <option value="Nm">Nm (métrico)</option>
-          <option value="Denier">Denier (Den)</option>
-          <option value="Tex">Tex</option>
-          <option value="Dtex">Dtex</option>
-        </select>
-      </div>
+      <p class="note">Apenas para fios simples/singelos (1 cabo) ou títulos resultantes.</p>
     </div>
-    <p class="note">Apenas para fios simples/singelos (1 cabo) ou títulos resultantes.</p>
-    <div id="conv-results" style="display:none; margin-top:1rem;">
-      <table class="conv-table" id="conv-table"></table>
+    <div id="conv-results" style="display:none">
+      <div style="border-top:1px solid var(--border)">
+        <table class="conv-table">
+          <thead><tr><th>Unidade</th><th>Sistema</th><th>Resultado</th></tr></thead>
+          <tbody id="conv-tbody"></tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- PANEL 3: Cálculos Rápidos -->
+<!-- ===== RÁPIDOS ===== -->
 <div class="panel" id="tab-rapidos">
 
   <div class="card">
-    <div class="section-title">Gramagem → Peso/metro linear</div>
-    <div class="grid3">
-      <div class="field"><label>Peso/metro linear (g/m)</label><input type="number" id="r1-plm" placeholder="0" step="any" min="0" oninput="calcR1()"></div>
-      <div class="field"><label>Largura (m)</label><input type="number" id="r1-larg" placeholder="0" step="any" min="0" oninput="calcR1()"></div>
-      <div class="field"><label style="color:var(--color-text-primary);font-weight:500;">Gramagem (g/m²)</label><input type="text" id="r1-result" readonly placeholder="—" style="background:var(--color-background-secondary);font-weight:500;"></div>
+    <div class="card-head"><h3>Peso/metro linear → Gramagem</h3></div>
+    <div class="card-body">
+      <div class="qrow">
+        <div class="field"><label>Peso/metro linear (g/m)</label><input type="number" id="r1-plm" placeholder="0" step="any" min="0" oninput="calcR1()"></div>
+        <div class="field"><label>Largura (m)</label><input type="number" id="r1-larg" placeholder="0" step="any" min="0" oninput="calcR1()"></div>
+        <div class="arrow">→</div>
+        <div class="field out"><label>Gramagem (g/m²)</label><input type="text" id="r1-result" readonly placeholder="—"></div>
+      </div>
     </div>
   </div>
 
   <div class="card">
-    <div class="section-title">Peso/metro linear → Gramagem</div>
-    <div class="grid3">
-      <div class="field"><label>Gramagem (g/m²)</label><input type="number" id="r2-gram" placeholder="0" step="any" min="0" oninput="calcR2()"></div>
-      <div class="field"><label>Largura (m)</label><input type="number" id="r2-larg" placeholder="0" step="any" min="0" oninput="calcR2()"></div>
-      <div class="field"><label style="color:var(--color-text-primary);font-weight:500;">Peso/metro linear (g/m)</label><input type="text" id="r2-result" readonly placeholder="—" style="background:var(--color-background-secondary);font-weight:500;"></div>
-
+    <div class="card-head"><h3>Gramagem → Peso/metro linear</h3></div>
+    <div class="card-body">
+      <div class="qrow">
+        <div class="field"><label>Gramagem (g/m²)</label><input type="number" id="r2-gram" placeholder="0" step="any" min="0" oninput="calcR2()"></div>
+        <div class="field"><label>Largura (m)</label><input type="number" id="r2-larg" placeholder="0" step="any" min="0" oninput="calcR2()"></div>
+        <div class="arrow">→</div>
+        <div class="field out"><label>Peso/metro linear (g/m)</label><input type="text" id="r2-result" readonly placeholder="—"></div>
+      </div>
     </div>
   </div>
 
   <div class="card">
-    <div class="section-title">Comprimento total (metragem)</div>
-    <div class="grid3">
-      <div class="field"><label>Peso/metro linear (g/m)</label><input type="number" id="r3-plm" placeholder="0" step="any" min="0" oninput="calcR3()"></div>
-      <div class="field"><label>Peso total (kg)</label><input type="number" id="r3-ptot" placeholder="0" step="any" min="0" oninput="calcR3()"></div>
-      <div class="field"><label style="color:var(--color-text-primary);font-weight:500;">Comprimento (m)</label><input type="text" id="r3-result" readonly placeholder="—" style="background:var(--color-background-secondary);font-weight:500;"></div>
+    <div class="card-head"><h3>Comprimento total</h3></div>
+    <div class="card-body">
+      <div class="qrow">
+        <div class="field"><label>Peso/metro linear (g/m)</label><input type="number" id="r3-plm" placeholder="0" step="any" min="0" oninput="calcR3()"></div>
+        <div class="field"><label>Peso total (kg)</label><input type="number" id="r3-ptot" placeholder="0" step="any" min="0" oninput="calcR3()"></div>
+        <div class="arrow">→</div>
+        <div class="field out"><label>Comprimento (m)</label><input type="text" id="r3-result" readonly placeholder="—"></div>
+      </div>
     </div>
   </div>
 
   <div class="card">
-    <div class="section-title">Peso total</div>
-    <div class="grid3">
-      <div class="field"><label>Peso/metro linear (g/m)</label><input type="number" id="r4-plm" placeholder="0" step="any" min="0" oninput="calcR4()"></div>
-      <div class="field"><label>Comprimento total (m)</label><input type="number" id="r4-comp" placeholder="0" step="any" min="0" oninput="calcR4()"></div>
-      <div class="field"><label style="color:var(--color-text-primary);font-weight:500;">Peso total (kg)</label><input type="text" id="r4-result" readonly placeholder="—" style="background:var(--color-background-secondary);font-weight:500;"></div>
+    <div class="card-head"><h3>Peso total</h3></div>
+    <div class="card-body">
+      <div class="qrow">
+        <div class="field"><label>Peso/metro linear (g/m)</label><input type="number" id="r4-plm" placeholder="0" step="any" min="0" oninput="calcR4()"></div>
+        <div class="field"><label>Comprimento total (m)</label><input type="number" id="r4-comp" placeholder="0" step="any" min="0" oninput="calcR4()"></div>
+        <div class="arrow">→</div>
+        <div class="field out"><label>Peso total (kg)</label><input type="text" id="r4-result" readonly placeholder="—"></div>
+      </div>
     </div>
   </div>
+
+</div>
 </div>
 
 <script>
-let tipoAtual = 'ambos';
-
-function showTab(t) {
-  document.querySelectorAll('.tab').forEach((b,i) => {
-    const ids = ['gramagem','conversao','rapidos'];
-    b.classList.toggle('active', ids[i] === t);
-  });
-  document.querySelectorAll('.panel').forEach((p,i) => {
-    const ids = ['tab-gramagem','tab-conversao','tab-rapidos'];
-    p.classList.toggle('active', ids[i] === 'tab-'+t);
+let tipoAtual='ambos';
+function showTab(t){
+  ['gramagem','conversao','rapidos'].forEach((id,i)=>{
+    document.querySelectorAll('.tab')[i].classList.toggle('active',id===t);
+    document.getElementById('tab-'+id).classList.toggle('active',id===t);
   });
 }
-
-function setTipo(t) {
-  tipoAtual = t;
-  ['ambos','algodao','linho'].forEach(x => document.getElementById('tipo-'+x).classList.toggle('active', x === t));
-  document.getElementById('bloco-algodao').style.display = (t === 'linho') ? 'none' : 'block';
-  document.getElementById('bloco-linho').style.display = (t === 'algodao') ? 'none' : 'block';
-  document.getElementById('gram-results').style.display = 'none';
+function setTipo(t){
+  tipoAtual=t;
+  ['ambos','algodao','linho'].forEach(x=>document.getElementById('tipo-'+x).classList.toggle('active',x===t));
+  document.getElementById('bloco-algodao').style.display=(t==='linho')?'none':'block';
+  document.getElementById('bloco-linho').style.display=(t==='algodao')?'none':'block';
+  document.getElementById('gram-results').style.display='none';
 }
-
-function v(id) { return parseFloat(document.getElementById(id).value) || 0; }
-
-function gramNe(ft, ftr, net, netr, et, etr) {
-  if (!ft || !ftr || !net || !netr) return null;
-  const teia = (ft * 100 * (1 + et/100)) / (net * 1.6935);
-  const trama = (ftr * 100 * (1 + etr/100)) / (netr * 1.6935);
-  return teia + trama;
+function v(id){return parseFloat(document.getElementById(id).value)||0}
+function gramNe(ft,ftr,net,netr,et,etr){
+  if(!ft||!ftr||!net||!netr)return null;
+  return(ft*100*(1+et/100))/(net*1.6935)+(ftr*100*(1+etr/100))/(netr*1.6935);
 }
-
-function gramNm(ft, ftr, nmt, nmtr, et, etr) {
-  if (!ft || !ftr || !nmt || !nmtr) return null;
-  const teia = (ft * 100 * (1 + et/100)) / nmt;
-  const trama = (ftr * 100 * (1 + etr/100)) / nmtr;
-  return teia + trama;
+function gramNm(ft,ftr,nmt,nmtr,et,etr){
+  if(!ft||!ftr||!nmt||!nmtr)return null;
+  return(ft*100*(1+et/100))/nmt+(ftr*100*(1+etr/100))/nmtr;
 }
-
-function calcGramagem() {
-  const err = document.getElementById('gram-error');
-  err.textContent = '';
-  const larg_al = v('al-larg'), larg_li = v('li-larg');
-  let results = [];
-
-  if (tipoAtual !== 'linho') {
-    const g = gramNe(v('al-ft'), v('al-ftr'), v('al-net'), v('al-netr'), v('al-et'), v('al-etr'));
-    if (g === null) { err.textContent = 'Preencha todos os campos de Algodão.'; return; }
-    if (!larg_al) { err.textContent = 'Informe a largura da tela (Algodão).'; return; }
-    results.push({ label: 'Gramagem — Algodão', value: g.toFixed(2), unit: 'g/m²' });
-    results.push({ label: 'Peso linear — Algodão', value: (g * larg_al / 100).toFixed(2), unit: 'g/m' });
+function calcGramagem(){
+  const err=document.getElementById('gram-error');
+  err.textContent='';
+  const lal=v('al-larg'),lli=v('li-larg');
+  let res=[];
+  if(tipoAtual!=='linho'){
+    const g=gramNe(v('al-ft'),v('al-ftr'),v('al-net'),v('al-netr'),v('al-et'),v('al-etr'));
+    if(!g){err.textContent='Preencha todos os campos de Algodão.';return}
+    if(!lal){err.textContent='Informe a largura da tela (Algodão).';return}
+    res.push({label:'Gramagem — Algodão',val:g.toFixed(2),unit:'g/m²'});
+    res.push({label:'Peso linear — Algodão',val:(g*lal/100).toFixed(2),unit:'g/m'});
   }
-
-  if (tipoAtual !== 'algodao') {
-    const g = gramNm(v('li-ft'), v('li-ftr'), v('li-nmt'), v('li-nmtr'), v('li-et'), v('li-etr'));
-    if (g === null) { err.textContent += ' Preencha todos os campos de Linho.'; return; }
-    if (!larg_li) { err.textContent += ' Informe a largura da tela (Linho).'; return; }
-    results.push({ label: 'Gramagem — Linho', value: g.toFixed(2), unit: 'g/m²' });
-    results.push({ label: 'Peso linear — Linho', value: (g * larg_li / 100).toFixed(2), unit: 'g/m' });
+  if(tipoAtual!=='algodao'){
+    const g=gramNm(v('li-ft'),v('li-ftr'),v('li-nmt'),v('li-nmtr'),v('li-et'),v('li-etr'));
+    if(!g){err.textContent+=' Preencha todos os campos de Linho.';return}
+    if(!lli){err.textContent+=' Informe a largura da tela (Linho).';return}
+    res.push({label:'Gramagem — Linho',val:g.toFixed(2),unit:'g/m²'});
+    res.push({label:'Peso linear — Linho',val:(g*lli/100).toFixed(2),unit:'g/m'});
   }
-
-  if (tipoAtual === 'ambos' && results.length === 4) {
-    const tot = parseFloat(results[0].value) + parseFloat(results[2].value);
-    const larg_med = (larg_al + larg_li) / 2;
-    results.push({ label: 'Gramagem total (combinada)', value: tot.toFixed(2), unit: 'g/m²' });
-    results.push({ label: 'Peso linear total', value: (tot * larg_med / 100).toFixed(2), unit: 'g/m' });
+  if(tipoAtual==='ambos'&&res.length===4){
+    const tot=parseFloat(res[0].val)+parseFloat(res[2].val);
+    const lm=(lal+lli)/2;
+    res.push({label:'Gramagem total combinada',val:tot.toFixed(2),unit:'g/m²',gold:true});
+    res.push({label:'Peso linear total',val:(tot*lm/100).toFixed(2),unit:'g/m',gold:true});
   }
-
-  const grid = document.getElementById('gram-result-grid');
-  grid.innerHTML = results.map(r => `
-    <div class="result-card">
-      <div class="label">${r.label}</div>
-      <div class="value">${r.value} <span class="unit">${r.unit}</span></div>
+  document.getElementById('gram-result-grid').innerHTML=res.map(r=>`
+    <div class="rcard${r.gold?' gold':''}">
+      <div class="rlabel">${r.label}</div>
+      <div class="rval">${r.val}</div>
+      <div class="runit">${r.unit}</div>
     </div>`).join('');
-  document.getElementById('gram-results').style.display = 'block';
+  document.getElementById('gram-results').style.display='block';
 }
-
-function limparGramagem() {
-  ['al-ft','al-ftr','al-net','al-netr','al-et','al-etr','al-larg','li-ft','li-ftr','li-nmt','li-nmtr','li-et','li-etr','li-larg','nome-projeto'].forEach(id => { document.getElementById(id).value = ''; });
-  document.getElementById('gram-results').style.display = 'none';
-  document.getElementById('gram-error').textContent = '';
+function limparGramagem(){
+  ['al-ft','al-ftr','al-net','al-netr','al-et','al-etr','al-larg','li-ft','li-ftr','li-nmt','li-nmtr','li-et','li-etr','li-larg','nome-projeto'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('gram-results').style.display='none';
+  document.getElementById('gram-error').textContent='';
 }
-
-function exportPDF() {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  const nome = document.getElementById('nome-projeto').value || 'Sem nome';
-  doc.setFontSize(16); doc.text('Calculadora Têxtil', 14, 18);
-  doc.setFontSize(11); doc.text('Projeto: ' + nome, 14, 28);
-  doc.text('Data: ' + new Date().toLocaleDateString('pt-PT'), 14, 35);
-  let y = 45;
-  document.querySelectorAll('#gram-result-grid .result-card').forEach(c => {
-    const lbl = c.querySelector('.label').textContent;
-    const val = c.querySelector('.value').textContent;
-    doc.text(lbl + ': ' + val, 14, y); y += 8;
+function exportPDF(){
+  const{jsPDF}=window.jspdf;
+  const doc=new jsPDF();
+  const nome=document.getElementById('nome-projeto').value||'Sem nome';
+  doc.setFontSize(16);doc.text('Calculadora Têxtil',14,18);
+  doc.setFontSize(11);doc.text('Projeto: '+nome,14,28);
+  doc.text('Data: '+new Date().toLocaleDateString('pt-PT'),14,35);
+  let y=45;
+  document.querySelectorAll('#gram-result-grid .rcard').forEach(c=>{
+    doc.text(c.querySelector('.rlabel').textContent+': '+c.querySelector('.rval').textContent+' '+c.querySelector('.runit').textContent,14,y);y+=8;
   });
   doc.save('calculo-textil.pdf');
 }
-
-function toTex(val, unit) {
-  switch(unit) {
-    case 'Ne': return 590.5 / val;
-    case 'Nm': return 1000 / val;
-    case 'Denier': return val / 9;
-    case 'Tex': return val;
-    case 'Dtex': return val / 10;
-  }
+function toTex(val,unit){return unit==='Ne'?590.5/val:unit==='Nm'?1000/val:unit==='Denier'?val/9:unit==='Tex'?val:val/10}
+function fromTex(tex,unit){return unit==='Ne'?590.5/tex:unit==='Nm'?1000/tex:unit==='Denier'?tex*9:unit==='Tex'?tex:tex*10}
+function calcConversao(){
+  const val=parseFloat(document.getElementById('conv-val').value);
+  const unit=document.getElementById('conv-unit').value;
+  const div=document.getElementById('conv-results');
+  if(!val||val<=0){div.style.display='none';return}
+  const tex=toTex(val,unit);
+  const defs=[
+    {key:'Ne',name:'Ne',sys:'Inglês (cotton)'},
+    {key:'Nm',name:'Nm',sys:'Métrico'},
+    {key:'Denier',name:'Denier',sys:'Denier (Den)'},
+    {key:'Tex',name:'Tex',sys:'Tex'},
+    {key:'Dtex',name:'Dtex',sys:'Decitex'}
+  ];
+  document.getElementById('conv-tbody').innerHTML=defs.map(d=>`
+    <tr${d.key===unit?' class="origin"':''}>
+      <td>${d.name}${d.key===unit?'<span class="origin-tag">origem</span>':''}</td>
+      <td style="color:var(--ink3);font-size:13px">${d.sys}</td>
+      <td>${fromTex(tex,d.key).toFixed(4)}</td>
+    </tr>`).join('');
+  div.style.display='block';
 }
-function fromTex(tex, unit) {
-  switch(unit) {
-    case 'Ne': return 590.5 / tex;
-    case 'Nm': return 1000 / tex;
-    case 'Denier': return tex * 9;
-    case 'Tex': return tex;
-    case 'Dtex': return tex * 10;
-  }
-}
-
-function calcConversao() {
-  const val = parseFloat(document.getElementById('conv-val').value);
-  const unit = document.getElementById('conv-unit').value;
-  const div = document.getElementById('conv-results');
-  if (!val || val <= 0) { div.style.display = 'none'; return; }
-  const tex = toTex(val, unit);
-  const units = ['Ne','Nm','Denier','Tex','Dtex'];
-  const labels = { Ne: 'Ne (inglês)', Nm: 'Nm (métrico)', Denier: 'Denier (Den)', Tex: 'Tex', Dtex: 'Dtex' };
-  const tbl = document.getElementById('conv-table');
-  tbl.innerHTML = units.map(u => {
-    const res = fromTex(tex, u);
-    return `<tr><td>${labels[u]}</td><td>${res.toFixed(4)}</td></tr>`;
-  }).join('');
-  div.style.display = 'block';
-}
-
-function calcR1() {
-  const plm = parseFloat(document.getElementById('r1-plm').value);
-  const larg = parseFloat(document.getElementById('r1-larg').value);
-  const el = document.getElementById('r1-result');
-  el.value = (plm > 0 && larg > 0) ? (plm / larg).toFixed(2) : '';
-}
-function calcR2() {
-  const gram = parseFloat(document.getElementById('r2-gram').value);
-  const larg = parseFloat(document.getElementById('r2-larg').value);
-  const el = document.getElementById('r2-result');
-  el.value = (gram > 0 && larg > 0) ? (gram * larg).toFixed(2) : '';
-}
-function calcR3() {
-  const plm = parseFloat(document.getElementById('r3-plm').value);
-  const ptot = parseFloat(document.getElementById('r3-ptot').value);
-  const el = document.getElementById('r3-result');
-  el.value = (plm > 0 && ptot > 0) ? ((ptot * 1000) / plm).toFixed(2) : '';
-}
-function calcR4() {
-  const plm = parseFloat(document.getElementById('r4-plm').value);
-  const comp = parseFloat(document.getElementById('r4-comp').value);
-  const el = document.getElementById('r4-result');
-  el.value = (plm > 0 && comp > 0) ? ((plm * comp) / 1000).toFixed(4) : '';
-}
+function calcR1(){const p=parseFloat(document.getElementById('r1-plm').value),l=parseFloat(document.getElementById('r1-larg').value);document.getElementById('r1-result').value=(p>0&&l>0)?(p/l).toFixed(2):'';}
+function calcR2(){const g=parseFloat(document.getElementById('r2-gram').value),l=parseFloat(document.getElementById('r2-larg').value);document.getElementById('r2-result').value=(g>0&&l>0)?(g*l).toFixed(2):'';}
+function calcR3(){const p=parseFloat(document.getElementById('r3-plm').value),t=parseFloat(document.getElementById('r3-ptot').value);document.getElementById('r3-result').value=(p>0&&t>0)?((t*1000)/p).toFixed(2):'';}
+function calcR4(){const p=parseFloat(document.getElementById('r4-plm').value),c=parseFloat(document.getElementById('r4-comp').value);document.getElementById('r4-result').value=(p>0&&c>0)?((p*c)/1000).toFixed(4):'';}
 </script>
 </body>
 </html>
