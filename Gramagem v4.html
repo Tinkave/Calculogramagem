@@ -2,273 +2,347 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<title>Calculadora de Gramagem e Peso Linear</title>
-
-<!-- jsPDF -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora Têxtil</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
-
 <style>
-/* ---------------------- */
-/*   ESTILO PROFISSIONAL  */
-/* ---------------------- */
-
-body {
-    margin: 0;
-    padding: 0;
-    font-family: "Segoe UI", Arial, sans-serif;
-
-    /* 🔵 Imagem de fundo profissional */
-    background-image: url("https://www.dropbox.com/scl/fi/v8hmjb4yod0tt71ucm9px/tinkave-logo.png?rlkey=2fw9bk40kchsjkdjfk5g6spur&e=1&dl=1");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center 40px;
-    background-attachment: fixed;
-
-    /* Overlay escuro */
-    position: relative;
-}
-
-body::before {
-    content: "";
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.55);
-    backdrop-filter: blur(3px);
-    z-index: 0;
-}
-
-/* Container central com efeito glass */
-.container {
-    position: relative;
-    z-index: 1;
-    max-width: 550px;
-    margin: 120px auto 60px auto;
-    padding: 30px;
-
-    background: rgba(255,255,255,0.12);
-    border-radius: 14px;
-    backdrop-filter: blur(14px);
-    box-shadow: 0 0 25px rgba(0,0,0,0.45);
-
-    color: white;
-}
-
-/* Títulos */
-h1, h2 {
-    text-align: center;
-    margin-top: 0;
-    font-weight: 300;
-}
-
-/* Labels e inputs */
-label {
-    display: block;
-    margin-top: 15px;
-    font-weight: 500;
-}
-
-input, select {
-    width: 100%;
-    padding: 10px;
-    margin-top: 6px;
-    border-radius: 6px;
-    border: none;
-    outline: none;
-    background: rgba(255,255,255,0.85);
-    font-size: 15px;
-}
-
-/* Botões */
-button {
-    width: 100%;
-    margin-top: 20px;
-    padding: 12px;
-    font-size: 16px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    background: #0078D7;
-    color: white;
-    transition: 0.2s;
-}
-
-button:hover {
-    background: #005a9e;
-}
-
-/* Resultado */
-#resultado {
-    margin-top: 25px;
-    font-size: 1.2em;
-    font-weight: 500;
-    text-align: center;
-}
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans, system-ui, sans-serif); color: var(--color-text-primary); background: transparent; padding: 1rem 0.5rem 2rem; }
+  h1 { font-size: 20px; font-weight: 500; margin-bottom: 0.25rem; }
+  .subtitle { font-size: 14px; color: var(--color-text-secondary); margin-bottom: 1.5rem; }
+  .tabs { display: flex; gap: 4px; border-bottom: 0.5px solid var(--color-border-tertiary); margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .tab { padding: 8px 16px; font-size: 14px; font-weight: 400; border: none; background: transparent; color: var(--color-text-secondary); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -0.5px; transition: color 0.15s; }
+  .tab.active { color: var(--color-text-primary); border-bottom-color: var(--color-text-primary); font-weight: 500; }
+  .tab:hover:not(.active) { color: var(--color-text-primary); }
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.25rem; margin-bottom: 1rem; }
+  .section-title { font-size: 15px; font-weight: 500; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+  .section-title span.tag { font-size: 11px; font-weight: 400; background: var(--color-background-secondary); color: var(--color-text-secondary); padding: 2px 8px; border-radius: 4px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  .field label { font-size: 12px; color: var(--color-text-secondary); }
+  .field input, .field select { width: 100%; padding: 7px 10px; font-size: 14px; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); background: var(--color-background-secondary); color: var(--color-text-primary); }
+  .field input:focus, .field select:focus { outline: none; border-color: var(--color-border-primary); }
+  .field.full { grid-column: 1 / -1; }
+  .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 1rem; }
+  .result-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 1rem; }
+  .result-card .label { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px; }
+  .result-card .value { font-size: 22px; font-weight: 500; }
+  .result-card .unit { font-size: 13px; color: var(--color-text-secondary); font-weight: 400; }
+  .btn-row { display: flex; gap: 8px; margin-top: 1rem; flex-wrap: wrap; }
+  button.calc { padding: 8px 20px; font-size: 14px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: transparent; color: var(--color-text-primary); cursor: pointer; }
+  button.calc:hover { background: var(--color-background-secondary); }
+  button.calc.primary { background: var(--color-text-primary); color: var(--color-background-primary); border-color: var(--color-text-primary); }
+  button.calc.primary:hover { opacity: 0.85; }
+  .divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 1rem 0; }
+  .tipo-row { display: flex; gap: 8px; margin-bottom: 1rem; flex-wrap: wrap; }
+  .tipo-btn { padding: 6px 14px; font-size: 13px; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); background: transparent; color: var(--color-text-secondary); cursor: pointer; }
+  .tipo-btn.active { border-color: var(--color-border-primary); color: var(--color-text-primary); background: var(--color-background-secondary); font-weight: 500; }
+  .note { font-size: 12px; color: var(--color-text-secondary); margin-top: 8px; font-style: italic; }
+  .conv-table { width: 100%; border-collapse: collapse; margin-top: 0.75rem; font-size: 14px; }
+  .conv-table td { padding: 8px 10px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .conv-table td:first-child { color: var(--color-text-secondary); font-size: 12px; }
+  .conv-table td:last-child { font-weight: 500; text-align: right; }
+  .error { color: var(--color-text-danger, #c0392b); font-size: 13px; margin-top: 6px; }
+  @media (max-width: 480px) {
+    .grid2, .grid3 { grid-template-columns: 1fr; }
+    .result-grid { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
-
 <body>
+<h1>Calculadora Têxtil</h1>
+<p class="subtitle">Gramagem · Peso linear · Conversão de títulos · Metragem · Peso total</p>
 
-<div class="container">
-
-<h1>Calculadora de Gramagem e Peso Linear</h1>
-
-<label for="tipoCalculo">Tipo de Cálculo:</label>
-<select id="tipoCalculo" onchange="mostrarCampos()">
-    <option value="algodao">Algodão</option>
-    <option value="linho">Linho</option>
-    <option value="ambos">Ambos</option>
-</select>
-
-<label>Nome do Projeto:
-<input type="text" id="nomeProjeto" placeholder="Ex: Tecidos Verão 2025">
-</label>
-
-<!-- ALGODÃO -->
-<div id="algodaoCampos">
-<h2>Algodão (Ne)</h2>
-
-<label>Fios Teia: <input type="number" id="fiosTeiaCO" value="110"></label>
-<label>Fios Trama: <input type="number" id="fiosTramaCO" value="90"></label>
-<label>Ne Teia: <input type="text" id="neTeiaCO" value="40"></label>
-<label>Ne Trama: <input type="text" id="neTramaCO" value="40"></label>
-<label>Encolhimento Teia (%): <input type="number" id="encTeiaCO" value="5"></label>
-<label>Encolhimento Trama (%): <input type="number" id="encTramaCO" value="3"></label>
-<label>Largura da Tela (cm): <input type="number" id="larguraCO" value="315"></label>
+<div class="tabs">
+  <button class="tab active" onclick="showTab('gramagem')">Gramagem / Peso linear</button>
+  <button class="tab" onclick="showTab('conversao')">Conversão de títulos</button>
+  <button class="tab" onclick="showTab('rapidos')">Cálculos rápidos</button>
 </div>
 
-<!-- LINHO -->
-<div id="linhoCampos">
-<h2>Linho (Nm)</h2>
+<!-- PANEL 1: Gramagem -->
+<div class="panel active" id="tab-gramagem">
+  <div class="card">
+    <div class="field" style="margin-bottom:1rem;">
+      <label>Nome do projeto</label>
+      <input type="text" id="nome-projeto" placeholder="Ex.: Tecido algodão/linho 2024">
+    </div>
+    <div class="field" style="margin-bottom:1rem;">
+      <label>Tipo de cálculo</label>
+      <div class="tipo-row">
+        <button class="tipo-btn active" id="tipo-ambos" onclick="setTipo('ambos')">Algodão + Linho</button>
+        <button class="tipo-btn" id="tipo-algodao" onclick="setTipo('algodao')">Somente Algodão</button>
+        <button class="tipo-btn" id="tipo-linho" onclick="setTipo('linho')">Somente Linho</button>
+      </div>
+    </div>
+  </div>
 
-<label>Fios Teia: <input type="number" id="fiosTeiaLI" value="50"></label>
-<label>Fios Trama: <input type="number" id="fiosTramaLI" value="48"></label>
-<label>Nm Teia: <input type="text" id="nmTeiaLI" value="26"></label>
-<label>Nm Trama: <input type="text" id="nmTramaLI" value="26"></label>
-<label>Encolhimento Teia (%): <input type="number" id="encTeiaLI" value="5"></label>
-<label>Encolhimento Trama (%): <input type="number" id="encTramaLI" value="5"></label>
-<label>Largura da Tela (cm): <input type="number" id="larguraLI" value="330"></label>
+  <div class="card" id="bloco-algodao">
+    <div class="section-title">Algodão <span class="tag">Ne</span></div>
+    <div class="grid2">
+      <div class="field"><label>Fios teia (fios/cm)</label><input type="number" id="al-ft" placeholder="0" step="any" min="0"></div>
+      <div class="field"><label>Fios trama (fios/cm)</label><input type="number" id="al-ftr" placeholder="0" step="any" min="0"></div>
+      <div class="field"><label>Ne teia</label><input type="number" id="al-net" placeholder="0" step="any" min="0"></div>
+      <div class="field"><label>Ne trama</label><input type="number" id="al-netr" placeholder="0" step="any" min="0"></div>
+      <div class="field"><label>Encolhimento teia (%)</label><input type="number" id="al-et" placeholder="0" step="any" min="0" max="100"></div>
+      <div class="field"><label>Encolhimento trama (%)</label><input type="number" id="al-etr" placeholder="0" step="any" min="0" max="100"></div>
+      <div class="field full"><label>Largura da tela (cm)</label><input type="number" id="al-larg" placeholder="0" step="any" min="0"></div>
+    </div>
+  </div>
+
+  <div class="card" id="bloco-linho">
+    <div class="section-title">Linho <span class="tag">Nm</span></div>
+    <div class="grid2">
+      <div class="field"><label>Fios teia (fios/cm)</label><input type="number" id="li-ft" placeholder="0" step="any" min="0"></div>
+      <div class="field"><label>Fios trama (fios/cm)</label><input type="number" id="li-ftr" placeholder="0" step="any" min="0"></div>
+      <div class="field"><label>Nm teia</label><input type="number" id="li-nmt" placeholder="0" step="any" min="0"></div>
+      <div class="field"><label>Nm trama</label><input type="number" id="li-nmtr" placeholder="0" step="any" min="0"></div>
+      <div class="field"><label>Encolhimento teia (%)</label><input type="number" id="li-et" placeholder="0" step="any" min="0" max="100"></div>
+      <div class="field"><label>Encolhimento trama (%)</label><input type="number" id="li-etr" placeholder="0" step="any" min="0" max="100"></div>
+      <div class="field full"><label>Largura da tela (cm)</label><input type="number" id="li-larg" placeholder="0" step="any" min="0"></div>
+    </div>
+  </div>
+
+  <div id="gram-error" class="error"></div>
+  <div class="btn-row">
+    <button class="calc primary" onclick="calcGramagem()">Calcular</button>
+    <button class="calc" onclick="limparGramagem()">Limpar</button>
+    <button class="calc" onclick="exportPDF()">Exportar PDF</button>
+  </div>
+
+  <div id="gram-results" style="display:none;">
+    <hr class="divider">
+    <div class="result-grid" id="gram-result-grid"></div>
+  </div>
 </div>
 
-<label>Exportar:
-<select id="exportarTipo">
-    <option value="ambos">Algodão e Linho</option>
-    <option value="algodao">Somente Algodão</option>
-    <option value="linho">Somente Linho</option>
-</select>
-</label>
+<!-- PANEL 2: Conversão de Títulos -->
+<div class="panel" id="tab-conversao">
+  <div class="card">
+    <div class="section-title">Conversão de títulos de fio</div>
+    <div class="grid2">
+      <div class="field">
+        <label>Valor do título</label>
+        <input type="number" id="conv-val" placeholder="Ex.: 30" step="any" min="0" oninput="calcConversao()">
+      </div>
+      <div class="field">
+        <label>Unidade de origem</label>
+        <select id="conv-unit" onchange="calcConversao()">
+          <option value="Ne">Ne (inglês / cotton)</option>
+          <option value="Nm">Nm (métrico)</option>
+          <option value="Denier">Denier (Den)</option>
+          <option value="Tex">Tex</option>
+          <option value="Dtex">Dtex</option>
+        </select>
+      </div>
+    </div>
+    <p class="note">Apenas para fios simples/singelos (1 cabo) ou títulos resultantes.</p>
+    <div id="conv-results" style="display:none; margin-top:1rem;">
+      <table class="conv-table" id="conv-table"></table>
+    </div>
+  </div>
+</div>
 
-<button onclick="calcular()">Calcular</button>
-<button onclick="exportarPDF()">Exportar para PDF</button>
+<!-- PANEL 3: Cálculos Rápidos -->
+<div class="panel" id="tab-rapidos">
 
-<div id="resultado"></div>
+  <div class="card">
+    <div class="section-title">Gramagem → Peso/metro linear</div>
+    <div class="grid3">
+      <div class="field"><label>Peso/metro linear (g/m)</label><input type="number" id="r1-plm" placeholder="0" step="any" min="0" oninput="calcR1()"></div>
+      <div class="field"><label>Largura (m)</label><input type="number" id="r1-larg" placeholder="0" step="any" min="0" oninput="calcR1()"></div>
+      <div class="field"><label style="color:var(--color-text-primary);font-weight:500;">Gramagem (g/m²)</label><input type="text" id="r1-result" readonly placeholder="—" style="background:var(--color-background-secondary);font-weight:500;"></div>
+    </div>
+  </div>
 
+  <div class="card">
+    <div class="section-title">Peso/metro linear → Gramagem</div>
+    <div class="grid3">
+      <div class="field"><label>Gramagem (g/m²)</label><input type="number" id="r2-gram" placeholder="0" step="any" min="0" oninput="calcR2()"></div>
+      <div class="field"><label>Largura (m)</label><input type="number" id="r2-larg" placeholder="0" step="any" min="0" oninput="calcR2()"></div>
+      <div class="field"><label style="color:var(--color-text-primary);font-weight:500;">Peso/metro linear (g/m)</label><input type="text" id="r2-result" readonly placeholder="—" style="background:var(--color-background-secondary);font-weight:500;"></div>
+
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">Comprimento total (metragem)</div>
+    <div class="grid3">
+      <div class="field"><label>Peso/metro linear (g/m)</label><input type="number" id="r3-plm" placeholder="0" step="any" min="0" oninput="calcR3()"></div>
+      <div class="field"><label>Peso total (kg)</label><input type="number" id="r3-ptot" placeholder="0" step="any" min="0" oninput="calcR3()"></div>
+      <div class="field"><label style="color:var(--color-text-primary);font-weight:500;">Comprimento (m)</label><input type="text" id="r3-result" readonly placeholder="—" style="background:var(--color-background-secondary);font-weight:500;"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">Peso total</div>
+    <div class="grid3">
+      <div class="field"><label>Peso/metro linear (g/m)</label><input type="number" id="r4-plm" placeholder="0" step="any" min="0" oninput="calcR4()"></div>
+      <div class="field"><label>Comprimento total (m)</label><input type="number" id="r4-comp" placeholder="0" step="any" min="0" oninput="calcR4()"></div>
+      <div class="field"><label style="color:var(--color-text-primary);font-weight:500;">Peso total (kg)</label><input type="text" id="r4-result" readonly placeholder="—" style="background:var(--color-background-secondary);font-weight:500;"></div>
+    </div>
+  </div>
 </div>
 
 <script>
-function mostrarCampos() {
-    const tipo = document.getElementById("tipoCalculo").value;
-    document.getElementById("algodaoCampos").style.display = (tipo === "linho") ? "none" : "block";
-    document.getElementById("linhoCampos").style.display = (tipo === "algodao") ? "none" : "block";
-}
-window.onload = mostrarCampos;
+let tipoAtual = 'ambos';
 
-function corrigirTitulo(titulo) {
-    if (titulo.includes("/")) {
-        const partes = titulo.split("/");
-        return parseFloat(partes[0]) / parseFloat(partes[1]);
-    }
-    return parseFloat(titulo);
+function showTab(t) {
+  document.querySelectorAll('.tab').forEach((b,i) => {
+    const ids = ['gramagem','conversao','rapidos'];
+    b.classList.toggle('active', ids[i] === t);
+  });
+  document.querySelectorAll('.panel').forEach((p,i) => {
+    const ids = ['tab-gramagem','tab-conversao','tab-rapidos'];
+    p.classList.toggle('active', ids[i] === 'tab-'+t);
+  });
 }
 
-let resultados = {};
-
-function calcular() {
-    /* Algodão */
-    const fiosTeiaCOv = parseFloat(fiosTeiaCO.value);
-    const fiosTramaCOv = parseFloat(fiosTramaCO.value);
-    const neTeiaCOv = corrigirTitulo(neTeiaCO.value);
-    const neTramaCOv = corrigirTitulo(neTramaCO.value);
-    const encTeiaCOv = parseFloat(encTeiaCO.value) / 100;
-    const encTramaCOv = parseFloat(encTramaCO.value) / 100;
-    const larguraCOv = parseFloat(larguraCO.value);
-
-    const parteTeiaCO = ((fiosTeiaCOv / 0.0254) * (1 + encTeiaCOv)) / (neTeiaCOv / 0.59);
-    const parteTramaCO = ((fiosTramaCOv / 0.0254) * (1 + encTramaCOv)) / (neTramaCOv / 0.59);
-    const gramagemCO = parteTeiaCO + parteTramaCO;
-    const pesoLinearCO = gramagemCO * (larguraCOv / 100);
-
-    /* Linho */
-    const fiosTeiaLIv = parseFloat(fiosTeiaLI.value);
-    const fiosTramaLIv = parseFloat(fiosTramaLI.value);
-    const nmTeiaLIv = corrigirTitulo(nmTeiaLI.value);
-    const nmTramaLIv = corrigirTitulo(nmTramaLI.value);
-    const encTeiaLIv = parseFloat(encTeiaLI.value) / 100;
-    const encTramaLIv = parseFloat(encTramaLI.value) / 100;
-    const larguraLIv = parseFloat(larguraLI.value);
-
-    const parteTeiaLI = ((fiosTeiaLIv / 0.0254) * (1 + encTeiaLIv)) / nmTeiaLIv;
-    const parteTramaLI = ((fiosTramaLIv / 0.0254) * (1 + encTramaLIv)) / nmTramaLIv;
-    const gramagemLI = parteTeiaLI + parteTramaLI;
-    const pesoLinearLI = gramagemLI * (larguraLIv / 100);
-
-    resultados = {
-        algodao: {
-            gramagem: gramagemCO.toFixed(2),
-            pesoLinear: pesoLinearCO.toFixed(2)
-        },
-        linho: {
-            gramagem: gramagemLI.toFixed(2),
-            pesoLinear: pesoLinearLI.toFixed(2)
-        }
-    };
-
-    let texto = "";
-    if (tipoCalculo.value !== "linho")
-        texto += `Gramagem Algodão: ${resultados.algodao.gramagem} g/m²<br>Peso Linear: ${resultados.algodao.pesoLinear} g/m<br><br>`;
-    if (tipoCalculo.value !== "algodao")
-        texto += `Gramagem Linho: ${resultados.linho.gramagem} g/m²<br>Peso Linear: ${resultados.linho.pesoLinear} g/m`;
-
-    resultado.innerHTML = texto;
+function setTipo(t) {
+  tipoAtual = t;
+  ['ambos','algodao','linho'].forEach(x => document.getElementById('tipo-'+x).classList.toggle('active', x === t));
+  document.getElementById('bloco-algodao').style.display = (t === 'linho') ? 'none' : 'block';
+  document.getElementById('bloco-linho').style.display = (t === 'algodao') ? 'none' : 'block';
+  document.getElementById('gram-results').style.display = 'none';
 }
 
-function exportarPDF() {
-    const tipo = exportarTipo.value;
-    const nomeProjeto = nomeProjeto.value.trim() || "Projeto: Cálculo de Gramagem";
+function v(id) { return parseFloat(document.getElementById(id).value) || 0; }
 
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
+function gramNe(ft, ftr, net, netr, et, etr) {
+  if (!ft || !ftr || !net || !netr) return null;
+  const teia = (ft * 100 * (1 + et/100)) / (net * 1.6935);
+  const trama = (ftr * 100 * (1 + etr/100)) / (netr * 1.6935);
+  return teia + trama;
+}
 
-    doc.setFontSize(14);
-    doc.text(nomeProjeto, 20, 20);
+function gramNm(ft, ftr, nmt, nmtr, et, etr) {
+  if (!ft || !ftr || !nmt || !nmtr) return null;
+  const teia = (ft * 100 * (1 + et/100)) / nmt;
+  const trama = (ftr * 100 * (1 + etr/100)) / nmtr;
+  return teia + trama;
+}
 
-    let y = 30;
+function calcGramagem() {
+  const err = document.getElementById('gram-error');
+  err.textContent = '';
+  const larg_al = v('al-larg'), larg_li = v('li-larg');
+  let results = [];
 
-    if (tipo !== "linho") {
-        doc.text("Algodão (CO)", 20, y);
-        doc.autoTable({
-            startY: y + 5,
-            head: [["Gramagem (g/m²)", "Peso Linear (g/m)"]],
-            body: [[resultados.algodao.gramagem, resultados.algodao.pesoLinear]]
-        });
-        y = doc.lastAutoTable.finalY + 10;
-    }
+  if (tipoAtual !== 'linho') {
+    const g = gramNe(v('al-ft'), v('al-ftr'), v('al-net'), v('al-netr'), v('al-et'), v('al-etr'));
+    if (g === null) { err.textContent = 'Preencha todos os campos de Algodão.'; return; }
+    if (!larg_al) { err.textContent = 'Informe a largura da tela (Algodão).'; return; }
+    results.push({ label: 'Gramagem — Algodão', value: g.toFixed(2), unit: 'g/m²' });
+    results.push({ label: 'Peso linear — Algodão', value: (g * larg_al / 100).toFixed(2), unit: 'g/m' });
+  }
 
-    if (tipo !== "algodao") {
-        doc.text("Linho (LI)", 20, y);
-        doc.autoTable({
-            startY: y + 5,
-            head: [["Gramagem (g/m²)", "Peso Linear (g/m)"]],
-            body: [[resultados.linho.gramagem, resultados.linho.pesoLinear]]
-        });
-    }
+  if (tipoAtual !== 'algodao') {
+    const g = gramNm(v('li-ft'), v('li-ftr'), v('li-nmt'), v('li-nmtr'), v('li-et'), v('li-etr'));
+    if (g === null) { err.textContent += ' Preencha todos os campos de Linho.'; return; }
+    if (!larg_li) { err.textContent += ' Informe a largura da tela (Linho).'; return; }
+    results.push({ label: 'Gramagem — Linho', value: g.toFixed(2), unit: 'g/m²' });
+    results.push({ label: 'Peso linear — Linho', value: (g * larg_li / 100).toFixed(2), unit: 'g/m' });
+  }
 
-    doc.save("calculo_gramagem.pdf");
+  if (tipoAtual === 'ambos' && results.length === 4) {
+    const tot = parseFloat(results[0].value) + parseFloat(results[2].value);
+    const larg_med = (larg_al + larg_li) / 2;
+    results.push({ label: 'Gramagem total (combinada)', value: tot.toFixed(2), unit: 'g/m²' });
+    results.push({ label: 'Peso linear total', value: (tot * larg_med / 100).toFixed(2), unit: 'g/m' });
+  }
+
+  const grid = document.getElementById('gram-result-grid');
+  grid.innerHTML = results.map(r => `
+    <div class="result-card">
+      <div class="label">${r.label}</div>
+      <div class="value">${r.value} <span class="unit">${r.unit}</span></div>
+    </div>`).join('');
+  document.getElementById('gram-results').style.display = 'block';
+}
+
+function limparGramagem() {
+  ['al-ft','al-ftr','al-net','al-netr','al-et','al-etr','al-larg','li-ft','li-ftr','li-nmt','li-nmtr','li-et','li-etr','li-larg','nome-projeto'].forEach(id => { document.getElementById(id).value = ''; });
+  document.getElementById('gram-results').style.display = 'none';
+  document.getElementById('gram-error').textContent = '';
+}
+
+function exportPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const nome = document.getElementById('nome-projeto').value || 'Sem nome';
+  doc.setFontSize(16); doc.text('Calculadora Têxtil', 14, 18);
+  doc.setFontSize(11); doc.text('Projeto: ' + nome, 14, 28);
+  doc.text('Data: ' + new Date().toLocaleDateString('pt-PT'), 14, 35);
+  let y = 45;
+  document.querySelectorAll('#gram-result-grid .result-card').forEach(c => {
+    const lbl = c.querySelector('.label').textContent;
+    const val = c.querySelector('.value').textContent;
+    doc.text(lbl + ': ' + val, 14, y); y += 8;
+  });
+  doc.save('calculo-textil.pdf');
+}
+
+function toTex(val, unit) {
+  switch(unit) {
+    case 'Ne': return 590.5 / val;
+    case 'Nm': return 1000 / val;
+    case 'Denier': return val / 9;
+    case 'Tex': return val;
+    case 'Dtex': return val / 10;
+  }
+}
+function fromTex(tex, unit) {
+  switch(unit) {
+    case 'Ne': return 590.5 / tex;
+    case 'Nm': return 1000 / tex;
+    case 'Denier': return tex * 9;
+    case 'Tex': return tex;
+    case 'Dtex': return tex * 10;
+  }
+}
+
+function calcConversao() {
+  const val = parseFloat(document.getElementById('conv-val').value);
+  const unit = document.getElementById('conv-unit').value;
+  const div = document.getElementById('conv-results');
+  if (!val || val <= 0) { div.style.display = 'none'; return; }
+  const tex = toTex(val, unit);
+  const units = ['Ne','Nm','Denier','Tex','Dtex'];
+  const labels = { Ne: 'Ne (inglês)', Nm: 'Nm (métrico)', Denier: 'Denier (Den)', Tex: 'Tex', Dtex: 'Dtex' };
+  const tbl = document.getElementById('conv-table');
+  tbl.innerHTML = units.map(u => {
+    const res = fromTex(tex, u);
+    return `<tr><td>${labels[u]}</td><td>${res.toFixed(4)}</td></tr>`;
+  }).join('');
+  div.style.display = 'block';
+}
+
+function calcR1() {
+  const plm = parseFloat(document.getElementById('r1-plm').value);
+  const larg = parseFloat(document.getElementById('r1-larg').value);
+  const el = document.getElementById('r1-result');
+  el.value = (plm > 0 && larg > 0) ? (plm / larg).toFixed(2) : '';
+}
+function calcR2() {
+  const gram = parseFloat(document.getElementById('r2-gram').value);
+  const larg = parseFloat(document.getElementById('r2-larg').value);
+  const el = document.getElementById('r2-result');
+  el.value = (gram > 0 && larg > 0) ? (gram * larg).toFixed(2) : '';
+}
+function calcR3() {
+  const plm = parseFloat(document.getElementById('r3-plm').value);
+  const ptot = parseFloat(document.getElementById('r3-ptot').value);
+  const el = document.getElementById('r3-result');
+  el.value = (plm > 0 && ptot > 0) ? ((ptot * 1000) / plm).toFixed(2) : '';
+}
+function calcR4() {
+  const plm = parseFloat(document.getElementById('r4-plm').value);
+  const comp = parseFloat(document.getElementById('r4-comp').value);
+  const el = document.getElementById('r4-result');
+  el.value = (plm > 0 && comp > 0) ? ((plm * comp) / 1000).toFixed(4) : '';
 }
 </script>
-
 </body>
 </html>
-
-
