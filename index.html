@@ -362,20 +362,33 @@ function v(id){return parseFloat(document.getElementById(id).value)||0}
 
 // ── Fórmulas ──────────────────────────────────────────
 // Ne (fios/pol) → g/m²
+// fios/pol × 39.37 = fios/m; 1/Ne tex = 590.5/Ne g/km = 590.5/(Ne×1000) g/m
+// g/m² = fios/m × (590.5/(Ne×1000)) × (1+enc/100) × 1000
+//       = fios/pol × 39.37 × 590.5/Ne × (1+enc/100) / 1000 × 1000
+//       = fios/pol × 39.37 × (1+enc/100) / Ne × (590.5/1000) ... não
+// Correto: g/m² = (fios/pol × 39.37 / Ne) × (590.5/1000) × (1+enc%) × 1000
+//               = fios/pol × 39.37 × 590.5 / Ne × (1+enc%) / 1000
 function gramNe(ft,ftr,net,netr,et,etr){
   if(!ft||!ftr||!net||!netr)return null;
-  return (ft*(1+et/100)/net + ftr*(1+etr/100)/netr)*(1000/590.5);
+  const teia = ft * 39.37 * (1+et/100) / net * (590.5/1000);
+  const trama = ftr * 39.37 * (1+etr/100) / netr * (590.5/1000);
+  return teia + trama;
 }
 // Nm (fios/pol) → g/m²
+// g/m² = fios/pol × 39.37 × (1+enc%) / Nm
 function gramNm(ft,ftr,nmt,nmtr,et,etr){
   if(!ft||!ftr||!nmt||!nmtr)return null;
-  return (ft*(1+et/100)/nmt + ftr*(1+etr/100)/nmtr)*(1000/39.37);
+  const teia = ft * 39.37 * (1+et/100) / nmt;
+  const trama = ftr * 39.37 * (1+etr/100) / nmtr;
+  return teia + trama;
 }
 // Dtex (fios/pol) → g/m²
-// g/m² = (fios_teia/pol × Dtex_teia × (1+enc_teia/100) + fios_trama/pol × Dtex_trama × (1+enc_trama/100)) × (39.37/10000)
+// g/m² = fios/pol × 39.37 × Dtex × (1+enc%) / 10000
 function gramDtex(ft,ftr,dt,dtr,et,etr){
   if(!ft||!ftr||!dt||!dtr)return null;
-  return (ft*dt*(1+et/100) + ftr*dtr*(1+etr/100))*(39.37/10000);
+  const teia = ft * 39.37 * dt * (1+et/100) / 10000;
+  const trama = ftr * 39.37 * dtr * (1+etr/100) / 10000;
+  return teia + trama;
 }
 
 // ── Calcular gramagem ─────────────────────────────────
