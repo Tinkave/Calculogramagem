@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora Têxtil — Tinkave</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --ink:#1a1a1a;--ink2:#555;--ink3:#888;
-  --surface:#fff;--surface2:#f7f6f4;--surface3:#f0ede8;
+  --surface:#fff;--surface2:#f7f6f4;
   --border:#e2ddd7;--border2:#c8c0b5;
   --accent:#2c4a3e;--accent2:#3d6b5c;--accent-light:#e8f0ed;
   --gold:#8b6914;--gold-light:#fdf6e3;
@@ -16,23 +17,24 @@
 }
 body{font-family:'Georgia',serif;color:var(--ink);background:var(--surface2);min-height:100vh;padding:0}
 
-.app-header{background:var(--accent);color:#fff;padding:1.5rem 1.75rem 1.25rem;position:relative;overflow:hidden;text-align:center}
+.app-header{background:var(--accent);color:#fff;padding:1.5rem 1.25rem 1.25rem;position:relative;overflow:hidden;text-align:center}
 .app-header::after{content:'';position:absolute;right:-40px;top:-40px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.05)}
-.app-header::before{content:'';position:absolute;right:60px;bottom:-60px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.04)}
-.app-header h1{font-size:15px;font-weight:400;letter-spacing:.06em;color:rgba(255,255,255,.7);margin-bottom:0;position:relative;font-family:system-ui,sans-serif;text-transform:uppercase}
+.app-header::before{content:'';position:absolute;left:-50px;bottom:-50px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.04)}
+.logo-badge{position:absolute;left:1.25rem;top:1.5rem;width:58px;height:58px;border-radius:50%;background:#15171e;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.35);z-index:2}
+.header-top{position:relative;margin-bottom:.6rem}
+.brand-name{font-size:24px;font-weight:700;color:#fff;font-family:system-ui,sans-serif;letter-spacing:.12em;line-height:1}
+.brand-sub{font-size:11px;color:rgba(255,255,255,.65);font-family:system-ui,sans-serif;margin-top:4px;letter-spacing:.05em}
+.brand-sub a{color:rgba(255,255,255,.85);text-decoration:underline;text-underline-offset:2px}
+.app-header h1{font-size:14px;font-weight:400;letter-spacing:.08em;color:rgba(255,255,255,.8);position:relative;font-family:system-ui,sans-serif;text-transform:uppercase;margin-top:.5rem}
 .app-header p{font-size:11px;color:rgba(255,255,255,.5);letter-spacing:.07em;text-transform:uppercase;font-family:system-ui,sans-serif;position:relative;margin-top:3px}
-.header-top{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:.6rem;position:relative}
-.header-brand .brand-name{font-size:22px;font-weight:700;color:#fff;font-family:system-ui,sans-serif;letter-spacing:.1em;line-height:1}
-.header-brand .brand-sub{font-size:11px;color:rgba(255,255,255,.6);font-family:system-ui,sans-serif;margin-top:3px}
-.header-brand .brand-sub a{color:rgba(255,255,255,.8);text-decoration:underline;text-underline-offset:2px}
 
-.tabs-wrap{background:var(--accent);padding:0 1.75rem;border-bottom:1px solid rgba(255,255,255,.12)}
-.tabs{display:flex;gap:0}
-.tab{padding:11px 16px;font-size:11px;font-weight:400;font-family:system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;border:none;background:transparent;color:rgba(255,255,255,.5);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s}
+.tabs-wrap{background:var(--accent);padding:0 1.25rem;border-bottom:1px solid rgba(255,255,255,.12)}
+.tabs{display:flex;gap:0;justify-content:center}
+.tab{padding:11px 14px;font-size:11px;font-family:system-ui,sans-serif;letter-spacing:.05em;text-transform:uppercase;border:none;background:transparent;color:rgba(255,255,255,.5);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s}
 .tab.active{color:#fff;border-bottom-color:#fff}
 .tab:hover:not(.active){color:rgba(255,255,255,.8)}
 
-.app-body{padding:1.5rem 1.25rem 3rem;display:flex;flex-direction:column;gap:1.25rem;max-width:720px;margin:0 auto}
+.app-body{padding:1.5rem 1rem 3rem;display:flex;flex-direction:column;gap:1.25rem;max-width:720px;margin:0 auto}
 .panel{display:none;flex-direction:column;gap:1.25rem}
 .panel.active{display:flex}
 
@@ -40,9 +42,10 @@ body{font-family:'Georgia',serif;color:var(--ink);background:var(--surface2);min
 .card-head{padding:.875rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
 .card-head h3{font-size:13px;font-weight:400;letter-spacing:.07em;text-transform:uppercase;color:var(--ink2);font-family:system-ui,sans-serif}
 .badge{font-size:10px;font-family:system-ui,sans-serif;padding:3px 9px;border-radius:20px;background:var(--accent-light);color:var(--accent);letter-spacing:.05em;font-weight:500;border:1px solid rgba(44,74,62,.15)}
+.card-body{padding:1.25rem}
 
 .tipo-row{display:flex;gap:6px;flex-wrap:wrap}
-.tipo-btn{padding:7px 16px;font-size:12px;font-family:system-ui,sans-serif;letter-spacing:.04em;border:1px solid var(--border2);border-radius:20px;background:transparent;color:var(--ink3);cursor:pointer;transition:all .2s}
+.tipo-btn{padding:7px 14px;font-size:12px;font-family:system-ui,sans-serif;letter-spacing:.04em;border:1px solid var(--border2);border-radius:20px;background:transparent;color:var(--ink3);cursor:pointer;transition:all .2s}
 .tipo-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
 .tipo-btn:hover:not(.active){border-color:var(--accent);color:var(--accent)}
 
@@ -55,7 +58,7 @@ body{font-family:'Georgia',serif;color:var(--ink);background:var(--surface2);min
 
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-.full{grid-column:1/-1}
+.grid4{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:12px}
 
 .sub{padding:1rem 1.25rem}
 .sub+.sub{border-top:1px solid var(--border)}
@@ -92,35 +95,58 @@ body{font-family:'Georgia',serif;color:var(--ink);background:var(--surface2);min
 .origin-tag{font-size:10px;letter-spacing:.05em;background:var(--accent);color:#fff;padding:2px 7px;border-radius:10px;margin-left:6px;vertical-align:middle}
 
 .qrow{display:grid;grid-template-columns:1fr 1fr 32px 1fr;gap:12px;align-items:end}
-.arrow{display:flex;align-items:center;justify-content:center;height:38px;color:var(--border2);font-size:20px}
+.arrow{display:flex;align-items:center;justify-content:center;height:38px;color:var(--border2);font-size:20px;font-family:system-ui,sans-serif}
 .note{font-size:12px;color:var(--ink3);margin-top:10px;font-style:italic;font-family:system-ui,sans-serif;line-height:1.5}
 .project-input{width:100%;padding:10px 14px;font-size:16px;font-family:'Georgia',serif;border:none;border-bottom:1.5px solid var(--border2);border-radius:0;background:transparent;color:var(--ink)}
 .project-input:focus{outline:none;border-bottom-color:var(--accent)}
 .project-input::placeholder{color:var(--ink3)}
-.card-body{padding:1.25rem}
 
-@media(max-width:520px){
-  .grid2,.grid3{grid-template-columns:1fr}
+@media(max-width:560px){
+  .grid2,.grid3,.grid4{grid-template-columns:1fr}
   .qrow{grid-template-columns:1fr 1fr}
   .arrow{display:none}
   .result-grid{grid-template-columns:1fr 1fr}
-  .tab{padding:10px 10px;font-size:10px}
+  .tab{padding:10px 8px;font-size:10px}
 }
 </style>
 </head>
 <body>
 
 <div class="app-header">
-  <div class="header-top">
-    <canvas id="logo-canvas" width="120" height="44" style="flex-shrink:0"></canvas>
-    <div class="header-text">
-      <div class="brand-name">TINKAVE</div>
-      <div class="brand-sub">Tinturaria &amp; Acabamentos &nbsp;·&nbsp; <a href="https://tinkave.pt" target="_blank">tinkave.pt</a></div>
-    </div>
-    <div style="width:120px"></div>
+  <div class="logo-badge">
+    <svg width="50" height="50" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="tg" x1="92%" y1="20%" x2="8%" y2="80%">
+          <stop offset="0%" stop-color="#e2542b"/>
+          <stop offset="40%" stop-color="#b04434"/>
+          <stop offset="75%" stop-color="#4a4566"/>
+          <stop offset="100%" stop-color="#2f3b64"/>
+        </linearGradient>
+        <clipPath id="c0"><circle cx="50" cy="50" r="46"/></clipPath>
+        <clipPath id="w1"><path d="M50,50 L-2.9,-22.8 L102.9,-22.8 Z"/></clipPath>
+        <clipPath id="w2"><path d="M50,50 L102.9,-22.8 L135.6,77.8 Z"/></clipPath>
+        <clipPath id="w3"><path d="M50,50 L135.6,77.8 L50,140 Z"/></clipPath>
+        <clipPath id="w4"><path d="M50,50 L50,140 L-35.6,77.8 Z"/></clipPath>
+        <clipPath id="w5"><path d="M50,50 L-35.6,77.8 L-2.9,-22.8 Z"/></clipPath>
+        <g id="ln">
+          <path d="M-45 -4H145M-45 7H145M-45 18H145M-45 29H145M-45 40H145M-45 51H145M-45 62H145M-45 73H145M-45 84H145M-45 95H145M-45 106H145" stroke="url(#tg)" stroke-width="6.5" fill="none"/>
+        </g>
+      </defs>
+      <g clip-path="url(#c0)">
+        <g clip-path="url(#w1)"><g transform="rotate(45 50 50)"><use href="#ln"/></g></g>
+        <g clip-path="url(#w2)"><g transform="rotate(-55 50 50)"><use href="#ln"/></g></g>
+        <g clip-path="url(#w3)"><g transform="rotate(15 50 50)"><use href="#ln"/></g></g>
+        <g clip-path="url(#w4)"><g transform="rotate(75 50 50)"><use href="#ln"/></g></g>
+        <g clip-path="url(#w5)"><g transform="rotate(-45 50 50)"><use href="#ln"/></g></g>
+      </g>
+    </svg>
   </div>
-  <h1 style="text-align:center">Calculadora Têxtil</h1>
-  <p style="text-align:center">Gramagem · Peso linear · Conversão de títulos</p>
+  <div class="header-top">
+    <div class="brand-name">TINKAVE</div>
+    <div class="brand-sub">Tinturaria &amp; Acabamentos &nbsp;·&nbsp; <a href="https://tinkave.pt" target="_blank">tinkave.pt</a></div>
+  </div>
+  <h1>Calculadora Têxtil</h1>
+  <p>Gramagem · Peso linear · Conversão de títulos</p>
 </div>
 
 <div class="tabs-wrap">
@@ -146,14 +172,14 @@ body{font-family:'Georgia',serif;color:var(--ink);background:var(--surface2);min
           <button class="tipo-btn active" id="tipo-algodao" onclick="setTipo('algodao')">Algodão (Ne)</button>
           <button class="tipo-btn" id="tipo-linho" onclick="setTipo('linho')">Linho (Nm)</button>
           <button class="tipo-btn" id="tipo-poliester" onclick="setTipo('poliester')">Poliéster (Dtex)</button>
-          <button class="tipo-btn" id="tipo-ambos" onclick="setTipo('ambos')">Algodão + Linho</button>
+          <button class="tipo-btn" id="tipo-mistura" onclick="setTipo('mistura')">Mistura de fibras</button>
         </div>
       </div>
     </div>
   </div>
 
   <!-- ALGODÃO -->
-  <div class="card" id="bloco-algodao">
+  <div class="card mat-bloco" id="bloco-algodao">
     <div class="card-head"><h3>Algodão</h3><span class="badge">Ne · Fios/pol</span></div>
     <div class="sub">
       <div class="sub-label">Teia</div>
@@ -177,7 +203,7 @@ body{font-family:'Georgia',serif;color:var(--ink);background:var(--surface2);min
   </div>
 
   <!-- LINHO -->
-  <div class="card" id="bloco-linho" style="display:none">
+  <div class="card mat-bloco" id="bloco-linho" style="display:none">
     <div class="card-head"><h3>Linho</h3><span class="badge">Nm · Fios/pol</span></div>
     <div class="sub">
       <div class="sub-label">Teia</div>
@@ -201,7 +227,7 @@ body{font-family:'Georgia',serif;color:var(--ink);background:var(--surface2);min
   </div>
 
   <!-- POLIÉSTER -->
-  <div class="card" id="bloco-poliester" style="display:none">
+  <div class="card mat-bloco" id="bloco-poliester" style="display:none">
     <div class="card-head"><h3>Poliéster</h3><span class="badge">Dtex · Fios/pol</span></div>
     <div class="sub">
       <div class="sub-label">Teia</div>
@@ -221,6 +247,47 @@ body{font-family:'Georgia',serif;color:var(--ink);background:var(--surface2);min
     </div>
     <div class="sub">
       <div class="field" style="max-width:220px"><label>Largura da tela (cm)</label><input type="number" id="po-larg" placeholder="0" step="any" min="0"></div>
+    </div>
+  </div>
+
+  <!-- MISTURA DE FIBRAS -->
+  <div class="card mat-bloco" id="bloco-mistura" style="display:none">
+    <div class="card-head"><h3>Mistura de fibras</h3><span class="badge">Teia e trama independentes</span></div>
+    <div class="sub">
+      <div class="sub-label">Teia</div>
+      <div class="grid4">
+        <div class="field">
+          <label>Fibra da teia</label>
+          <select id="mx-fibra-t" onchange="updateMxLabels()">
+            <option value="Ne">Algodão (Ne)</option>
+            <option value="Nm">Linho (Nm)</option>
+            <option value="Dtex">Poliéster (Dtex)</option>
+          </select>
+        </div>
+        <div class="field"><label>Fios/polegada</label><input type="number" id="mx-ft" placeholder="0" step="any" min="0"></div>
+        <div class="field"><label id="mx-tit-t-label">Ne</label><input type="number" id="mx-tit-t" placeholder="0" step="any" min="0"></div>
+        <div class="field"><label>Encolhimento %</label><input type="number" id="mx-et" placeholder="0" step="any" min="0" max="100"></div>
+      </div>
+    </div>
+    <div class="sub">
+      <div class="sub-label">Trama</div>
+      <div class="grid4">
+        <div class="field">
+          <label>Fibra da trama</label>
+          <select id="mx-fibra-tr" onchange="updateMxLabels()">
+            <option value="Ne">Algodão (Ne)</option>
+            <option value="Nm" selected>Linho (Nm)</option>
+            <option value="Dtex">Poliéster (Dtex)</option>
+          </select>
+        </div>
+        <div class="field"><label>Fios/polegada</label><input type="number" id="mx-ftr" placeholder="0" step="any" min="0"></div>
+        <div class="field"><label id="mx-tit-tr-label">Nm</label><input type="number" id="mx-tit-tr" placeholder="0" step="any" min="0"></div>
+        <div class="field"><label>Encolhimento %</label><input type="number" id="mx-etr" placeholder="0" step="any" min="0" max="100"></div>
+      </div>
+    </div>
+    <div class="sub">
+      <div class="field" style="max-width:220px"><label>Largura da tela (cm)</label><input type="number" id="mx-larg" placeholder="0" step="any" min="0"></div>
+      <p class="note">Exemplos: teia 100% linho + trama 100% algodão, teia algodão + trama poliéster, etc.</p>
     </div>
   </div>
 
@@ -325,19 +392,6 @@ body{font-family:'Georgia',serif;color:var(--ink);background:var(--surface2);min
 </div><!-- app-body -->
 
 <script>
-// ── Logo ──────────────────────────────────────────────
-(function(){
-  const b64='data:image/jpeg;base64,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';
-  const img=new Image();
-  img.onload=function(){
-    const c=document.getElementById('logo-canvas');
-    if(!c)return;
-    c.getContext('2d').drawImage(img,0,0,120,44);
-  };
-  img.src=b64;
-})();
-
-// ── Tabs ──────────────────────────────────────────────
 function showTab(t){
   ['gramagem','conversao','rapidos'].forEach((id,i)=>{
     document.querySelectorAll('.tab')[i].classList.toggle('active',id===t);
@@ -345,90 +399,128 @@ function showTab(t){
   });
 }
 
-// ── Tipo selector ────────────────────────────────────
 let tipoAtual='algodao';
+let ultimoCalculo=null; // guarda dados p/ PDF
+
 function setTipo(t){
   tipoAtual=t;
-  ['algodao','linho','poliester','ambos'].forEach(x=>
+  ['algodao','linho','poliester','mistura'].forEach(x=>
     document.getElementById('tipo-'+x).classList.toggle('active',x===t));
-  document.getElementById('bloco-algodao').style.display=(t==='algodao'||t==='ambos')?'block':'none';
-  document.getElementById('bloco-linho').style.display=(t==='linho'||t==='ambos')?'block':'none';
+  document.getElementById('bloco-algodao').style.display=(t==='algodao')?'block':'none';
+  document.getElementById('bloco-linho').style.display=(t==='linho')?'block':'none';
   document.getElementById('bloco-poliester').style.display=(t==='poliester')?'block':'none';
+  document.getElementById('bloco-mistura').style.display=(t==='mistura')?'block':'none';
   document.getElementById('gram-results').style.display='none';
 }
-// init
-setTipo('algodao');
+
+function updateMxLabels(){
+  document.getElementById('mx-tit-t-label').textContent=document.getElementById('mx-fibra-t').value;
+  document.getElementById('mx-tit-tr-label').textContent=document.getElementById('mx-fibra-tr').value;
+}
 
 function v(id){return parseFloat(document.getElementById(id).value)||0}
+function fibraNome(sis){return sis==='Ne'?'Algodão':sis==='Nm'?'Linho':'Poliéster'}
 
-// ── Fórmulas ──────────────────────────────────────────
-// Ne (fios/pol) → g/m²
-// fios/pol × 39.37 = fios/m; 1/Ne tex = 590.5/Ne g/km = 590.5/(Ne×1000) g/m
-// g/m² = fios/m × (590.5/(Ne×1000)) × (1+enc/100) × 1000
-//       = fios/pol × 39.37 × 590.5/Ne × (1+enc/100) / 1000 × 1000
-//       = fios/pol × 39.37 × (1+enc/100) / Ne × (590.5/1000) ... não
-// Correto: g/m² = (fios/pol × 39.37 / Ne) × (590.5/1000) × (1+enc%) × 1000
-//               = fios/pol × 39.37 × 590.5 / Ne × (1+enc%) / 1000
-function gramNe(ft,ftr,net,netr,et,etr){
-  if(!ft||!ftr||!net||!netr)return null;
-  const teia = ft * 39.37 * (1+et/100) / net * (590.5/1000);
-  const trama = ftr * 39.37 * (1+etr/100) / netr * (590.5/1000);
-  return teia + trama;
-}
-// Nm (fios/pol) → g/m²
-// g/m² = fios/pol × 39.37 × (1+enc%) / Nm
-function gramNm(ft,ftr,nmt,nmtr,et,etr){
-  if(!ft||!ftr||!nmt||!nmtr)return null;
-  const teia = ft * 39.37 * (1+et/100) / nmt;
-  const trama = ftr * 39.37 * (1+etr/100) / nmtr;
-  return teia + trama;
-}
-// Dtex (fios/pol) → g/m²
-// g/m² = fios/pol × 39.37 × Dtex × (1+enc%) / 10000
-function gramDtex(ft,ftr,dt,dtr,et,etr){
-  if(!ft||!ftr||!dt||!dtr)return null;
-  const teia = ft * 39.37 * dt * (1+et/100) / 10000;
-  const trama = ftr * 39.37 * dtr * (1+etr/100) / 10000;
-  return teia + trama;
+// ── Gramagem de UM componente (teia OU trama) em g/m² ──
+// fios/pol × 39.37 = fios/metro
+// Ne:   g/m² = fios/m × (1+enc%) / Ne × 0.5905
+// Nm:   g/m² = fios/m × (1+enc%) / Nm
+// Dtex: g/m² = fios/m × Dtex × (1+enc%) / 10000
+function gramComponente(sistema, fios, titulo, enc){
+  if(!fios||!titulo) return null;
+  const fm = fios*39.37*(1+enc/100);
+  if(sistema==='Ne')   return fm/titulo*0.5905;
+  if(sistema==='Nm')   return fm/titulo;
+  if(sistema==='Dtex') return fm*titulo/10000;
+  return null;
 }
 
-// ── Calcular gramagem ─────────────────────────────────
 function calcGramagem(){
   const err=document.getElementById('gram-error');
   err.textContent='';
   let res=[];
+  let entradas=[];
+  let materialLabel='';
 
-  if(tipoAtual==='algodao'||tipoAtual==='ambos'){
-    const lal=v('al-larg');
-    const g=gramNe(v('al-ft'),v('al-ftr'),v('al-net'),v('al-netr'),v('al-et'),v('al-etr'));
-    if(!g){err.textContent='Preencha todos os campos de Algodão.';return}
-    if(!lal){err.textContent='Informe a largura da tela (Algodão).';return}
-    res.push({label:'Gramagem — Algodão',val:g.toFixed(2),unit:'g/m²'});
-    res.push({label:'Peso linear — Algodão',val:(g*lal/100).toFixed(2),unit:'g/m'});
+  if(tipoAtual==='algodao'){
+    materialLabel='Algodão (Ne)';
+    const gt=gramComponente('Ne',v('al-ft'),v('al-net'),v('al-et'));
+    const gtr=gramComponente('Ne',v('al-ftr'),v('al-netr'),v('al-etr'));
+    const larg=v('al-larg');
+    if(gt===null||gtr===null){err.textContent='Preencha todos os campos de Algodão.';return}
+    if(!larg){err.textContent='Informe a largura da tela.';return}
+    const g=gt+gtr;
+    entradas=[
+      ['Teia — Algodão',`${v('al-ft')} fios/pol · Ne ${v('al-net')} · enc. ${v('al-et')}%`],
+      ['Trama — Algodão',`${v('al-ftr')} fios/pol · Ne ${v('al-netr')} · enc. ${v('al-etr')}%`],
+      ['Largura da tela',`${larg} cm`]
+    ];
+    res.push({label:'Gramagem teia',val:gt.toFixed(2),unit:'g/m²'});
+    res.push({label:'Gramagem trama',val:gtr.toFixed(2),unit:'g/m²'});
+    res.push({label:'Gramagem total',val:g.toFixed(2),unit:'g/m²',gold:true});
+    res.push({label:'Peso linear',val:(g*larg/100).toFixed(2),unit:'g/m',gold:true});
   }
-  if(tipoAtual==='linho'||tipoAtual==='ambos'){
-    const lli=v('li-larg');
-    const g=gramNm(v('li-ft'),v('li-ftr'),v('li-nmt'),v('li-nmtr'),v('li-et'),v('li-etr'));
-    if(!g){err.textContent+=' Preencha todos os campos de Linho.';return}
-    if(!lli){err.textContent+=' Informe a largura da tela (Linho).';return}
-    res.push({label:'Gramagem — Linho',val:g.toFixed(2),unit:'g/m²'});
-    res.push({label:'Peso linear — Linho',val:(g*lli/100).toFixed(2),unit:'g/m'});
+  else if(tipoAtual==='linho'){
+    materialLabel='Linho (Nm)';
+    const gt=gramComponente('Nm',v('li-ft'),v('li-nmt'),v('li-et'));
+    const gtr=gramComponente('Nm',v('li-ftr'),v('li-nmtr'),v('li-etr'));
+    const larg=v('li-larg');
+    if(gt===null||gtr===null){err.textContent='Preencha todos os campos de Linho.';return}
+    if(!larg){err.textContent='Informe a largura da tela.';return}
+    const g=gt+gtr;
+    entradas=[
+      ['Teia — Linho',`${v('li-ft')} fios/pol · Nm ${v('li-nmt')} · enc. ${v('li-et')}%`],
+      ['Trama — Linho',`${v('li-ftr')} fios/pol · Nm ${v('li-nmtr')} · enc. ${v('li-etr')}%`],
+      ['Largura da tela',`${larg} cm`]
+    ];
+    res.push({label:'Gramagem teia',val:gt.toFixed(2),unit:'g/m²'});
+    res.push({label:'Gramagem trama',val:gtr.toFixed(2),unit:'g/m²'});
+    res.push({label:'Gramagem total',val:g.toFixed(2),unit:'g/m²',gold:true});
+    res.push({label:'Peso linear',val:(g*larg/100).toFixed(2),unit:'g/m',gold:true});
   }
-  if(tipoAtual==='poliester'){
-    const lpo=v('po-larg');
-    const g=gramDtex(v('po-ft'),v('po-ftr'),v('po-dt'),v('po-dtr'),v('po-et'),v('po-etr'));
-    if(!g){err.textContent='Preencha todos os campos de Poliéster.';return}
-    if(!lpo){err.textContent='Informe a largura da tela (Poliéster).';return}
-    res.push({label:'Gramagem — Poliéster',val:g.toFixed(2),unit:'g/m²'});
-    res.push({label:'Peso linear — Poliéster',val:(g*lpo/100).toFixed(2),unit:'g/m'});
+  else if(tipoAtual==='poliester'){
+    materialLabel='Poliéster (Dtex)';
+    const gt=gramComponente('Dtex',v('po-ft'),v('po-dt'),v('po-et'));
+    const gtr=gramComponente('Dtex',v('po-ftr'),v('po-dtr'),v('po-etr'));
+    const larg=v('po-larg');
+    if(gt===null||gtr===null){err.textContent='Preencha todos os campos de Poliéster.';return}
+    if(!larg){err.textContent='Informe a largura da tela.';return}
+    const g=gt+gtr;
+    entradas=[
+      ['Teia — Poliéster',`${v('po-ft')} fios/pol · ${v('po-dt')} dtex · enc. ${v('po-et')}%`],
+      ['Trama — Poliéster',`${v('po-ftr')} fios/pol · ${v('po-dtr')} dtex · enc. ${v('po-etr')}%`],
+      ['Largura da tela',`${larg} cm`]
+    ];
+    res.push({label:'Gramagem teia',val:gt.toFixed(2),unit:'g/m²'});
+    res.push({label:'Gramagem trama',val:gtr.toFixed(2),unit:'g/m²'});
+    res.push({label:'Gramagem total',val:g.toFixed(2),unit:'g/m²',gold:true});
+    res.push({label:'Peso linear',val:(g*larg/100).toFixed(2),unit:'g/m',gold:true});
   }
-  if(tipoAtual==='ambos'&&res.length===4){
-    const lal=v('al-larg'),lli=v('li-larg');
-    const tot=parseFloat(res[0].val)+parseFloat(res[2].val);
-    const lm=(lal+lli)/2;
-    res.push({label:'Gramagem total combinada',val:tot.toFixed(2),unit:'g/m²',gold:true});
-    res.push({label:'Peso linear total',val:(tot*lm/100).toFixed(2),unit:'g/m',gold:true});
+  else if(tipoAtual==='mistura'){
+    const fibT=document.getElementById('mx-fibra-t').value;
+    const fibTr=document.getElementById('mx-fibra-tr').value;
+    materialLabel=`Mistura: teia ${fibraNome(fibT)} + trama ${fibraNome(fibTr)}`;
+    const gt=gramComponente(fibT,v('mx-ft'),v('mx-tit-t'),v('mx-et'));
+    const gtr=gramComponente(fibTr,v('mx-ftr'),v('mx-tit-tr'),v('mx-etr'));
+    const larg=v('mx-larg');
+    if(gt===null||gtr===null){err.textContent='Preencha todos os campos da mistura.';return}
+    if(!larg){err.textContent='Informe a largura da tela.';return}
+    const g=gt+gtr;
+    entradas=[
+      [`Teia — ${fibraNome(fibT)}`,`${v('mx-ft')} fios/pol · ${fibT} ${v('mx-tit-t')} · enc. ${v('mx-et')}%`],
+      [`Trama — ${fibraNome(fibTr)}`,`${v('mx-ftr')} fios/pol · ${fibTr} ${v('mx-tit-tr')} · enc. ${v('mx-etr')}%`],
+      ['Largura da tela',`${larg} cm`]
+    ];
+    res.push({label:`Gramagem teia (${fibraNome(fibT)})`,val:gt.toFixed(2),unit:'g/m²'});
+    res.push({label:`Gramagem trama (${fibraNome(fibTr)})`,val:gtr.toFixed(2),unit:'g/m²'});
+    res.push({label:'Gramagem total',val:g.toFixed(2),unit:'g/m²',gold:true});
+    res.push({label:'Peso linear',val:(g*larg/100).toFixed(2),unit:'g/m',gold:true});
+    // composição percentual
+    res.push({label:`% peso teia`,val:(gt/g*100).toFixed(1),unit:'%'});
+    res.push({label:`% peso trama`,val:(gtr/g*100).toFixed(1),unit:'%'});
   }
+
+  ultimoCalculo={material:materialLabel,entradas:entradas,resultados:res.map(r=>[r.label,r.val+' '+r.unit])};
 
   document.getElementById('gram-result-grid').innerHTML=res.map(r=>`
     <div class="rcard${r.gold?' gold':''}">
@@ -443,26 +535,135 @@ function limparGramagem(){
   ['al-ft','al-ftr','al-net','al-netr','al-et','al-etr','al-larg',
    'li-ft','li-ftr','li-nmt','li-nmtr','li-et','li-etr','li-larg',
    'po-ft','po-ftr','po-dt','po-dtr','po-et','po-etr','po-larg',
+   'mx-ft','mx-ftr','mx-tit-t','mx-tit-tr','mx-et','mx-etr','mx-larg',
    'nome-projeto'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('gram-results').style.display='none';
   document.getElementById('gram-error').textContent='';
+  ultimoCalculo=null;
+}
+
+// ── PDF profissional com logo Tinkave ──
+function desenharLogoPDF(doc,cx,cy,r){
+  // novelo em riscas paralelas cruzadas sobre fundo escuro
+  doc.setLineWidth(1.1);
+  // grupo "\" topo (laranja)
+  doc.setDrawColor(226,84,43);
+  [[cx-4,cy-7.5,cx+4,cy+0.5],[cx-1,cy-8.2,cx+6.5,cy-0.7],[cx+2.5,cy-7.5,cx+7.5,cy-2.5],[cx-6.2,cy-4,cx-1.2,cy+1]].forEach(l=>doc.line(l[0],l[1],l[2],l[3]));
+  // grupo "/" esquerda/baixo (azul-marinho)
+  doc.setDrawColor(47,59,100);
+  [[cx-8.2,cy+1,cx-3.2,cy-4],[cx-7.8,cy+4.5,cx-1.8,cy-1.5],[cx-6,cy+6.8,cx,cy+0.8],[cx-4,cy+9,cx+2,cy+3]].forEach(l=>doc.line(l[0],l[1],l[2],l[3]));
+  // grupo "\" inferior-direito (vermelho escuro)
+  doc.setDrawColor(150,60,50);
+  [[cx+1,cy+2,cx+6,cy+7],[cx-1.5,cy+3.5,cx+3.5,cy+8.5],[cx+3.5,cy+1,cx+7.8,cy+5.3]].forEach(l=>doc.line(l[0],l[1],l[2],l[3]));
 }
 
 function exportPDF(){
+  if(!ultimoCalculo){
+    alert('Faça primeiro um cálculo antes de exportar.');
+    return;
+  }
   const{jsPDF}=window.jspdf;
   const doc=new jsPDF();
   const nome=document.getElementById('nome-projeto').value||'Sem nome';
-  doc.setFontSize(16);doc.text('Calculadora Têxtil — Tinkave',14,18);
-  doc.setFontSize(11);doc.text('Projeto: '+nome,14,28);
-  doc.text('Data: '+new Date().toLocaleDateString('pt-PT'),14,35);
-  let y=45;
-  document.querySelectorAll('#gram-result-grid .rcard').forEach(c=>{
-    doc.text(c.querySelector('.rlabel').textContent+': '+c.querySelector('.rval').textContent+' '+c.querySelector('.runit').textContent,14,y);y+=8;
+
+  // ── Cabeçalho com faixa verde
+  doc.setFillColor(44,74,62);
+  doc.rect(0,0,210,36,'F');
+
+  // logo (novelo em riscas) num círculo escuro
+  doc.setFillColor(255,255,255);
+  doc.circle(22,18,11.5,'F');
+  doc.setFillColor(21,23,30);
+  doc.circle(22,18,10,'F');
+  desenharLogoPDF(doc,22,18,9);
+
+  // marca
+  doc.setTextColor(255,255,255);
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(20);
+  doc.text('TINKAVE',40,16);
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(9);
+  doc.setTextColor(220,228,224);
+  doc.text('Tinturaria & Acabamentos  ·  tinkave.pt',40,23);
+  doc.setFontSize(10);
+  doc.setTextColor(255,255,255);
+  doc.text('Relatório — Calculadora Têxtil',40,30);
+
+  // ── Bloco do projeto
+  doc.setTextColor(26,26,26);
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(13);
+  doc.text(nome,14,48);
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(9);
+  doc.setTextColor(110,110,110);
+  doc.text('Tipo de cálculo: '+ultimoCalculo.material,14,55);
+  doc.text('Data: '+new Date().toLocaleDateString('pt-PT')+'  ·  Hora: '+new Date().toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'}),14,61);
+
+  doc.setDrawColor(226,221,215);
+  doc.setLineWidth(0.4);
+  doc.line(14,66,196,66);
+
+  // ── Dados de entrada
+  let y=76;
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(11);
+  doc.setTextColor(44,74,62);
+  doc.text('DADOS DE ENTRADA',14,y);
+  y+=8;
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(10);
+  ultimoCalculo.entradas.forEach(e=>{
+    doc.setTextColor(110,110,110);
+    doc.text(e[0],14,y);
+    doc.setTextColor(26,26,26);
+    doc.text(e[1],75,y);
+    y+=7;
   });
-  doc.save('calculo-textil.pdf');
+
+  y+=4;
+  doc.setDrawColor(226,221,215);
+  doc.line(14,y,196,y);
+  y+=10;
+
+  // ── Resultados
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(11);
+  doc.setTextColor(44,74,62);
+  doc.text('RESULTADOS',14,y);
+  y+=9;
+
+  ultimoCalculo.resultados.forEach((r,i)=>{
+    const destaque = r[0].includes('total')||r[0].includes('Peso linear');
+    if(destaque){
+      doc.setFillColor(253,246,227);
+      doc.roundedRect(12,y-5.5,184,9,1.5,1.5,'F');
+    }
+    doc.setFont('helvetica','normal');
+    doc.setFontSize(10);
+    doc.setTextColor(destaque?139:110,destaque?105:110,destaque?20:110);
+    doc.text(r[0],16,y);
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(11);
+    doc.setTextColor(destaque?139:26,destaque?105:26,destaque?20:26);
+    doc.text(r[1],150,y);
+    y+=10;
+  });
+
+  // ── Rodapé
+  doc.setDrawColor(226,221,215);
+  doc.line(14,280,196,280);
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(8);
+  doc.setTextColor(150,150,150);
+  doc.text('Documento gerado pela Calculadora Têxtil Tinkave  ·  tinkave.pt',14,286);
+  doc.text('Pág. 1/1',186,286);
+
+  const ficheiro='tinkave-'+nome.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')+'.pdf';
+  doc.save(ficheiro==='tinkave-.pdf'?'tinkave-calculo.pdf':ficheiro);
 }
 
-// ── Conversão de títulos ──────────────────────────────
 function toTex(val,unit){return unit==='Ne'?590.5/val:unit==='Nm'?1000/val:unit==='Denier'?val/9:unit==='Tex'?val:val/10}
 function fromTex(tex,unit){return unit==='Ne'?590.5/tex:unit==='Nm'?1000/tex:unit==='Denier'?tex*9:unit==='Tex'?tex:tex*10}
 function calcConversao(){
@@ -487,7 +688,6 @@ function calcConversao(){
   div.style.display='block';
 }
 
-// ── Cálculos rápidos ──────────────────────────────────
 function calcR1(){const p=parseFloat(document.getElementById('r1-plm').value),l=parseFloat(document.getElementById('r1-larg').value);document.getElementById('r1-result').value=(p>0&&l>0)?(p/l).toFixed(2):'';}
 function calcR2(){const g=parseFloat(document.getElementById('r2-gram').value),l=parseFloat(document.getElementById('r2-larg').value);document.getElementById('r2-result').value=(g>0&&l>0)?(g*l).toFixed(2):'';}
 function calcR3(){const p=parseFloat(document.getElementById('r3-plm').value),t=parseFloat(document.getElementById('r3-ptot').value);document.getElementById('r3-result').value=(p>0&&t>0)?((t*1000)/p).toFixed(2):'';}
