@@ -1,4 +1,16 @@
 <!DOCTYPE html>
+<!--
+═══════════════════════════════════════════════════════════════
+  CALCULADORA TÊXTIL TINKAVE
+  © 2026 Tinkave — Tinturaria & Acabamentos · tinkave.pt
+  Todos os direitos reservados.
+
+  Este código, incluindo a sua estrutura, design e funcionalidades,
+  é propriedade exclusiva da Tinkave. É proibida a cópia, reprodução,
+  distribuição ou utilização, total ou parcial, sem autorização
+  expressa e por escrito da Tinkave.
+═══════════════════════════════════════════════════════════════
+-->
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
@@ -108,6 +120,11 @@ body{font-family:'Georgia',serif;color:var(--ink);background:var(--surface2);min
 .project-input{width:100%;padding:10px 14px;font-size:16px;font-family:'Georgia',serif;border:none;border-bottom:1.5px solid var(--border2);border-radius:0;background:transparent;color:var(--ink)}
 .project-input:focus{outline:none;border-bottom-color:var(--accent)}
 .project-input::placeholder{color:var(--ink3)}
+
+.app-footer{text-align:center;padding:1.5rem 1rem 2rem;font-family:system-ui,sans-serif}
+.app-footer .copy{font-size:11px;color:var(--ink3);letter-spacing:.03em;line-height:1.6}
+.app-footer .copy a{color:var(--accent);text-decoration:none}
+.app-footer .copy a:hover{text-decoration:underline}
 
 @media(max-width:560px){
   .grid2,.grid3,.grid4{grid-template-columns:1fr}
@@ -398,6 +415,13 @@ body{font-family:'Georgia',serif;color:var(--ink);background:var(--surface2);min
 </div>
 
 </div><!-- app-body -->
+
+<footer class="app-footer">
+  <div class="copy">
+    © 2026 <strong>Tinkave</strong> — Tinturaria &amp; Acabamentos · <a href="https://tinkave.pt" target="_blank">tinkave.pt</a><br>
+    Todos os direitos reservados. Reprodução total ou parcial proibida sem autorização.
+  </div>
+</footer>
 
 <script>
 function showTab(t){
