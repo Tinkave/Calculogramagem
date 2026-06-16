@@ -118,6 +118,7 @@ body{font-family:'Georgia',serif;color:var(--ink);background:var(--surface2);min
 .origin-tag{font-size:10px;background:var(--accent);color:#fff;padding:2px 7px;border-radius:10px;margin-left:6px;vertical-align:middle}
 
 .qrow{display:grid;grid-template-columns:1fr 1fr 32px 1fr;gap:12px;align-items:end}
+.conv-row{grid-template-columns:1fr 32px 1fr}
 .arrow{display:flex;align-items:center;justify-content:center;height:38px;color:var(--border2);font-size:20px;font-family:system-ui,sans-serif}
 .note{font-size:12px;color:var(--ink3);margin-top:10px;font-style:italic;font-family:system-ui,sans-serif;line-height:1.5}
 .project-input{width:100%;padding:10px 14px;font-size:16px;font-family:'Georgia',serif;border:none;border-bottom:1.5px solid var(--border2);background:transparent;color:var(--ink)}
@@ -211,22 +212,22 @@ body{font-family:'Georgia',serif;color:var(--ink);background:var(--surface2);min
     <div class="sub">
       <div class="sub-label"><span class="lbl-teia">Teia</span></div>
       <div class="grid3">
-        <div class="field"><label class="lbl-fios">Fios/polegada</label><input type="number" id="al-ft" placeholder="0" step="any" min="0"></div>
-        <div class="field"><label>Ne</label><input type="number" id="al-net" placeholder="0" step="any" min="0"></div>
-        <div class="field"><label class="lbl-enc">Encolhimento %</label><input type="number" id="al-et" placeholder="0" step="any" min="0" max="100"></div>
+        <div class="field"><label class="lbl-fios">Fios/polegada</label><input type="text" inputmode="decimal" id="al-ft" placeholder="0" step="any" min="0"></div>
+        <div class="field"><label>Ne</label><input type="text" inputmode="decimal" id="al-net" placeholder="0" step="any" min="0"></div>
+        <div class="field"><label class="lbl-enc">Encolhimento %</label><input type="text" inputmode="decimal" id="al-et" placeholder="0" step="any" min="0" max="100"></div>
       </div>
     </div>
     <div class="sub">
       <div class="sub-label"><span class="lbl-trama">Trama</span></div>
       <div class="grid3">
-        <div class="field"><label class="lbl-fios">Fios/polegada</label><input type="number" id="al-ftr" placeholder="0" step="any" min="0"></div>
-        <div class="field"><label>Ne</label><input type="number" id="al-netr" placeholder="0" step="any" min="0"></div>
-        <div class="field"><label class="lbl-enc">Encolhimento %</label><input type="number" id="al-etr" placeholder="0" step="any" min="0" max="100"></div>
+        <div class="field"><label class="lbl-fios">Fios/polegada</label><input type="text" inputmode="decimal" id="al-ftr" placeholder="0" step="any" min="0"></div>
+        <div class="field"><label>Ne</label><input type="text" inputmode="decimal" id="al-netr" placeholder="0" step="any" min="0"></div>
+        <div class="field"><label class="lbl-enc">Encolhimento %</label><input type="text" inputmode="decimal" id="al-etr" placeholder="0" step="any" min="0" max="100"></div>
       </div>
     </div>
     <div class="sub">
       <div class="larg-group">
-        <div class="field"><label class="lbl-larg">Largura da tela</label><input type="number" id="al-larg" placeholder="0" step="any" min="0"></div>
+        <div class="field"><label class="lbl-larg">Largura da tela</label><input type="text" inputmode="decimal" id="al-larg" placeholder="0" step="any" min="0"></div>
         <select class="unit-sel" id="al-un"><option value="cm">cm</option><option value="pol">pol</option></select>
       </div>
     </div>
@@ -238,22 +239,22 @@ body{font-family:'Georgia',serif;color:var(--ink);background:var(--surface2);min
     <div class="sub">
       <div class="sub-label"><span class="lbl-teia">Teia</span></div>
       <div class="grid3">
-        <div class="field"><label class="lbl-fios">Fios/polegada</label><input type="number" id="li-ft" placeholder="0" step="any" min="0"></div>
-        <div class="field"><label>Nm</label><input type="number" id="li-nmt" placeholder="0" step="any" min="0"></div>
-        <div class="field"><label class="lbl-enc">Encolhimento %</label><input type="number" id="li-et" placeholder="0" step="any" min="0" max="100"></div>
+        <div class="field"><label class="lbl-fios">Fios/polegada</label><input type="text" inputmode="decimal" id="li-ft" placeholder="0" step="any" min="0"></div>
+        <div class="field"><label>Nm</label><input type="text" inputmode="decimal" id="li-nmt" placeholder="0" step="any" min="0"></div>
+        <div class="field"><label class="lbl-enc">Encolhimento %</label><input type="text" inputmode="decimal" id="li-et" placeholder="0" step="any" min="0" max="100"></div>
       </div>
     </div>
     <div class="sub">
       <div class="sub-label"><span class="lbl-trama">Trama</span></div>
       <div class="grid3">
-        <div class="field"><label class="lbl-fios">Fios/polegada</label><input type="number" id="li-ftr" placeholder="0" step="any" min="0"></div>
-        <div class="field"><label>Nm</label><input type="number" id="li-nmtr" placeholder="0" step="any" min="0"></div>
-        <div class="field"><label class="lbl-enc">Encolhimento %</label><input type="number" id="li-etr" placeholder="0" step="any" min="0" max="100"></div>
+        <div class="field"><label class="lbl-fios">Fios/polegada</label><input type="text" inputmode="decimal" id="li-ftr" placeholder="0" step="any" min="0"></div>
+        <div class="field"><label>Nm</label><input type="text" inputmode="decimal" id="li-nmtr" placeholder="0" step="any" min="0"></div>
+        <div class="field"><label class="lbl-enc">Encolhimento %</label><input type="text" inputmode="decimal" id="li-etr" placeholder="0" step="any" min="0" max="100"></div>
       </div>
     </div>
     <div class="sub">
       <div class="larg-group">
-        <div class="field"><label class="lbl-larg">Largura da tela</label><input type="number" id="li-larg" placeholder="0" step="any" min="0"></div>
+        <div class="field"><label class="lbl-larg">Largura da tela</label><input type="text" inputmode="decimal" id="li-larg" placeholder="0" step="any" min="0"></div>
         <select class="unit-sel" id="li-un"><option value="cm">cm</option><option value="pol">pol</option></select>
       </div>
     </div>
@@ -265,22 +266,22 @@ body{font-family:'Georgia',serif;color:var(--ink);background:var(--surface2);min
     <div class="sub">
       <div class="sub-label"><span class="lbl-teia">Teia</span></div>
       <div class="grid3">
-        <div class="field"><label class="lbl-fios">Fios/polegada</label><input type="number" id="po-ft" placeholder="0" step="any" min="0"></div>
-        <div class="field"><label>Dtex</label><input type="number" id="po-dt" placeholder="0" step="any" min="0"></div>
-        <div class="field"><label class="lbl-enc">Encolhimento %</label><input type="number" id="po-et" placeholder="0" step="any" min="0" max="100"></div>
+        <div class="field"><label class="lbl-fios">Fios/polegada</label><input type="text" inputmode="decimal" id="po-ft" placeholder="0" step="any" min="0"></div>
+        <div class="field"><label>Dtex</label><input type="text" inputmode="decimal" id="po-dt" placeholder="0" step="any" min="0"></div>
+        <div class="field"><label class="lbl-enc">Encolhimento %</label><input type="text" inputmode="decimal" id="po-et" placeholder="0" step="any" min="0" max="100"></div>
       </div>
     </div>
     <div class="sub">
       <div class="sub-label"><span class="lbl-trama">Trama</span></div>
       <div class="grid3">
-        <div class="field"><label class="lbl-fios">Fios/polegada</label><input type="number" id="po-ftr" placeholder="0" step="any" min="0"></div>
-        <div class="field"><label>Dtex</label><input type="number" id="po-dtr" placeholder="0" step="any" min="0"></div>
-        <div class="field"><label class="lbl-enc">Encolhimento %</label><input type="number" id="po-etr" placeholder="0" step="any" min="0" max="100"></div>
+        <div class="field"><label class="lbl-fios">Fios/polegada</label><input type="text" inputmode="decimal" id="po-ftr" placeholder="0" step="any" min="0"></div>
+        <div class="field"><label>Dtex</label><input type="text" inputmode="decimal" id="po-dtr" placeholder="0" step="any" min="0"></div>
+        <div class="field"><label class="lbl-enc">Encolhimento %</label><input type="text" inputmode="decimal" id="po-etr" placeholder="0" step="any" min="0" max="100"></div>
       </div>
     </div>
     <div class="sub">
       <div class="larg-group">
-        <div class="field"><label class="lbl-larg">Largura da tela</label><input type="number" id="po-larg" placeholder="0" step="any" min="0"></div>
+        <div class="field"><label class="lbl-larg">Largura da tela</label><input type="text" inputmode="decimal" id="po-larg" placeholder="0" step="any" min="0"></div>
         <select class="unit-sel" id="po-un"><option value="cm">cm</option><option value="pol">pol</option></select>
       </div>
     </div>
@@ -297,9 +298,9 @@ body{font-family:'Georgia',serif;color:var(--ink);background:var(--surface2);min
             <option value="Ne">Algodão (Ne)</option><option value="Nm">Linho (Nm)</option><option value="Dtex">Poliéster (Dtex)</option>
           </select>
         </div>
-        <div class="field"><label class="lbl-fios">Fios/polegada</label><input type="number" id="mx-ft" placeholder="0" step="any" min="0"></div>
-        <div class="field"><label id="mx-tit-t-label">Ne</label><input type="number" id="mx-tit-t" placeholder="0" step="any" min="0"></div>
-        <div class="field"><label class="lbl-enc">Encolhimento %</label><input type="number" id="mx-et" placeholder="0" step="any" min="0" max="100"></div>
+        <div class="field"><label class="lbl-fios">Fios/polegada</label><input type="text" inputmode="decimal" id="mx-ft" placeholder="0" step="any" min="0"></div>
+        <div class="field"><label id="mx-tit-t-label">Ne</label><input type="text" inputmode="decimal" id="mx-tit-t" placeholder="0" step="any" min="0"></div>
+        <div class="field"><label class="lbl-enc">Encolhimento %</label><input type="text" inputmode="decimal" id="mx-et" placeholder="0" step="any" min="0" max="100"></div>
       </div>
     </div>
     <div class="sub">
@@ -310,14 +311,14 @@ body{font-family:'Georgia',serif;color:var(--ink);background:var(--surface2);min
             <option value="Ne">Algodão (Ne)</option><option value="Nm" selected>Linho (Nm)</option><option value="Dtex">Poliéster (Dtex)</option>
           </select>
         </div>
-        <div class="field"><label class="lbl-fios">Fios/polegada</label><input type="number" id="mx-ftr" placeholder="0" step="any" min="0"></div>
-        <div class="field"><label id="mx-tit-tr-label">Nm</label><input type="number" id="mx-tit-tr" placeholder="0" step="any" min="0"></div>
-        <div class="field"><label class="lbl-enc">Encolhimento %</label><input type="number" id="mx-etr" placeholder="0" step="any" min="0" max="100"></div>
+        <div class="field"><label class="lbl-fios">Fios/polegada</label><input type="text" inputmode="decimal" id="mx-ftr" placeholder="0" step="any" min="0"></div>
+        <div class="field"><label id="mx-tit-tr-label">Nm</label><input type="text" inputmode="decimal" id="mx-tit-tr" placeholder="0" step="any" min="0"></div>
+        <div class="field"><label class="lbl-enc">Encolhimento %</label><input type="text" inputmode="decimal" id="mx-etr" placeholder="0" step="any" min="0" max="100"></div>
       </div>
     </div>
     <div class="sub">
       <div class="larg-group">
-        <div class="field"><label class="lbl-larg">Largura da tela</label><input type="number" id="mx-larg" placeholder="0" step="any" min="0"></div>
+        <div class="field"><label class="lbl-larg">Largura da tela</label><input type="text" inputmode="decimal" id="mx-larg" placeholder="0" step="any" min="0"></div>
         <select class="unit-sel" id="mx-un"><option value="cm">cm</option><option value="pol">pol</option></select>
       </div>
       <p class="note" data-i18n="notaMistura" style="margin-top:10px">Exemplos: teia 100% linho + trama 100% algodão, teia algodão + trama poliéster, etc.</p>
@@ -346,7 +347,7 @@ body{font-family:'Georgia',serif;color:var(--ink);background:var(--surface2);min
     <div class="card-head"><h3 data-i18n="convTitulo">Conversão de títulos de fio</h3></div>
     <div class="card-body" style="display:flex;flex-direction:column;gap:1rem">
       <div class="grid2">
-        <div class="field"><label data-i18n="valorTitulo">Valor do título</label><input type="number" id="conv-val" placeholder="30" step="any" min="0" oninput="calcConversao()"></div>
+        <div class="field"><label data-i18n="valorTitulo">Valor do título</label><input type="text" inputmode="decimal" id="conv-val" placeholder="30" step="any" min="0" oninput="calcConversao()"></div>
         <div class="field"><label data-i18n="unidOrigem">Unidade de origem</label>
           <select id="conv-unit" onchange="calcConversao()">
             <option value="Ne">Ne</option><option value="Nm">Nm</option><option value="Denier">Denier (Den)</option><option value="Tex">Tex</option><option value="Dtex">Dtex</option>
@@ -371,11 +372,10 @@ body{font-family:'Georgia',serif;color:var(--ink);background:var(--surface2);min
   <div class="card">
     <div class="card-head"><h3 data-i18n="convPolCm">Polegadas ↔ Centímetros</h3></div>
     <div class="card-body">
-      <div class="qrow">
-        <div class="field"><label data-i18n="polegadas">Polegadas (pol)</label><input type="number" id="pc-pol" placeholder="0" step="any" min="0" oninput="calcPolCm('pol')"></div>
+      <div class="qrow conv-row">
+        <div class="field"><label data-i18n="polegadas">Polegadas (pol)</label><input type="text" inputmode="decimal" id="pc-pol" placeholder="0" step="any" min="0" oninput="calcPolCm('pol')"></div>
         <div class="arrow">⇄</div>
-        <div class="field"><label data-i18n="centimetros">Centímetros (cm)</label><input type="number" id="pc-cm" placeholder="0" step="any" min="0" oninput="calcPolCm('cm')"></div>
-        <div></div>
+        <div class="field"><label data-i18n="centimetros">Centímetros (cm)</label><input type="text" inputmode="decimal" id="pc-cm" placeholder="0" step="any" min="0" oninput="calcPolCm('cm')"></div>
       </div>
       <p class="note" data-i18n="notaPolCm">1 polegada = 2,54 cm · Conversão automática nos dois sentidos.</p>
     </div>
@@ -383,8 +383,8 @@ body{font-family:'Georgia',serif;color:var(--ink);background:var(--surface2);min
   <div class="card">
     <div class="card-head"><h3 data-i18n="r1Title">Peso/metro linear → Gramagem</h3></div>
     <div class="card-body"><div class="qrow">
-      <div class="field"><label data-i18n="pesoMetroLinear">Peso/metro linear (g/m)</label><input type="number" id="r1-plm" placeholder="0" step="any" min="0" oninput="calcR1()"></div>
-      <div class="field"><label data-i18n="larguraM">Largura (m)</label><input type="number" id="r1-larg" placeholder="0" step="any" min="0" oninput="calcR1()"></div>
+      <div class="field"><label data-i18n="pesoMetroLinear">Peso/metro linear (g/m)</label><input type="text" inputmode="decimal" id="r1-plm" placeholder="0" step="any" min="0" oninput="calcR1()"></div>
+      <div class="field"><label data-i18n="larguraM">Largura (m)</label><input type="text" inputmode="decimal" id="r1-larg" placeholder="0" step="any" min="0" oninput="calcR1()"></div>
       <div class="arrow">→</div>
       <div class="field out"><label data-i18n="gramagemUn">Gramagem (g/m²)</label><input type="text" id="r1-result" readonly placeholder="—"></div>
     </div></div>
@@ -392,8 +392,8 @@ body{font-family:'Georgia',serif;color:var(--ink);background:var(--surface2);min
   <div class="card">
     <div class="card-head"><h3 data-i18n="r2Title">Gramagem → Peso/metro linear</h3></div>
     <div class="card-body"><div class="qrow">
-      <div class="field"><label data-i18n="gramagemUn">Gramagem (g/m²)</label><input type="number" id="r2-gram" placeholder="0" step="any" min="0" oninput="calcR2()"></div>
-      <div class="field"><label data-i18n="larguraM">Largura (m)</label><input type="number" id="r2-larg" placeholder="0" step="any" min="0" oninput="calcR2()"></div>
+      <div class="field"><label data-i18n="gramagemUn">Gramagem (g/m²)</label><input type="text" inputmode="decimal" id="r2-gram" placeholder="0" step="any" min="0" oninput="calcR2()"></div>
+      <div class="field"><label data-i18n="larguraM">Largura (m)</label><input type="text" inputmode="decimal" id="r2-larg" placeholder="0" step="any" min="0" oninput="calcR2()"></div>
       <div class="arrow">→</div>
       <div class="field out"><label data-i18n="pesoMetroLinear">Peso/metro linear (g/m)</label><input type="text" id="r2-result" readonly placeholder="—"></div>
     </div></div>
@@ -401,8 +401,8 @@ body{font-family:'Georgia',serif;color:var(--ink);background:var(--surface2);min
   <div class="card">
     <div class="card-head"><h3 data-i18n="r3Title">Comprimento total</h3></div>
     <div class="card-body"><div class="qrow">
-      <div class="field"><label data-i18n="pesoMetroLinear">Peso/metro linear (g/m)</label><input type="number" id="r3-plm" placeholder="0" step="any" min="0" oninput="calcR3()"></div>
-      <div class="field"><label data-i18n="pesoTotalKg">Peso total (kg)</label><input type="number" id="r3-ptot" placeholder="0" step="any" min="0" oninput="calcR3()"></div>
+      <div class="field"><label data-i18n="pesoMetroLinear">Peso/metro linear (g/m)</label><input type="text" inputmode="decimal" id="r3-plm" placeholder="0" step="any" min="0" oninput="calcR3()"></div>
+      <div class="field"><label data-i18n="pesoTotalKg">Peso total (kg)</label><input type="text" inputmode="decimal" id="r3-ptot" placeholder="0" step="any" min="0" oninput="calcR3()"></div>
       <div class="arrow">→</div>
       <div class="field out"><label data-i18n="comprimentoM">Comprimento (m)</label><input type="text" id="r3-result" readonly placeholder="—"></div>
     </div></div>
@@ -410,8 +410,8 @@ body{font-family:'Georgia',serif;color:var(--ink);background:var(--surface2);min
   <div class="card">
     <div class="card-head"><h3 data-i18n="r4Title">Peso total</h3></div>
     <div class="card-body"><div class="qrow">
-      <div class="field"><label data-i18n="pesoMetroLinear">Peso/metro linear (g/m)</label><input type="number" id="r4-plm" placeholder="0" step="any" min="0" oninput="calcR4()"></div>
-      <div class="field"><label data-i18n="comprimentoTotalM">Comprimento total (m)</label><input type="number" id="r4-comp" placeholder="0" step="any" min="0" oninput="calcR4()"></div>
+      <div class="field"><label data-i18n="pesoMetroLinear">Peso/metro linear (g/m)</label><input type="text" inputmode="decimal" id="r4-plm" placeholder="0" step="any" min="0" oninput="calcR4()"></div>
+      <div class="field"><label data-i18n="comprimentoTotalM">Comprimento total (m)</label><input type="text" inputmode="decimal" id="r4-comp" placeholder="0" step="any" min="0" oninput="calcR4()"></div>
       <div class="arrow">→</div>
       <div class="field out"><label data-i18n="pesoTotalKg">Peso total (kg)</label><input type="text" id="r4-result" readonly placeholder="—"></div>
     </div></div>
@@ -475,7 +475,9 @@ function updateMxLabels(){
   document.getElementById('mx-tit-tr-label').textContent=document.getElementById('mx-fibra-tr').value;
 }
 
-function v(id){return parseFloat(document.getElementById(id).value)||0}
+// lê o valor de um campo aceitando vírgula OU ponto como separador decimal
+function vc(id){return (document.getElementById(id).value||'').replace(',','.');}
+function v(id){return parseFloat(vc(id))||0}
 function fibraNome(s){return s==='Ne'?t('matAlgodao').split(' (')[0]:s==='Nm'?t('matLinho').split(' (')[0]:t('matPoli').split(' (')[0]}
 
 // Gramagem de um componente (g/m²) — fios/pol
@@ -624,7 +626,7 @@ function toTex(val,u){return u==='Ne'?590.5/val:u==='Nm'?1000/val:u==='Denier'?v
 function fromTex(tx,u){return u==='Ne'?590.5/tx:u==='Nm'?1000/tx:u==='Denier'?tx*9:u==='Tex'?tx:tx*10}
 function calcConversao(){
   const el=document.getElementById('conv-val');if(!el)return;
-  const val=parseFloat(el.value);const unit=document.getElementById('conv-unit').value;const div=document.getElementById('conv-results');
+  const val=parseFloat((el.value||'').replace(',','.'));const unit=document.getElementById('conv-unit').value;const div=document.getElementById('conv-results');
   if(!val||val<=0){div.style.display='none';return}
   const tex=toTex(val,unit);
   const sysMap={Ne:{pt:'Inglês (cotton)',es:'Inglés (cotton)',fr:'Anglais (coton)',en:'English (cotton)'},Nm:{pt:'Métrico',es:'Métrico',fr:'Métrique',en:'Metric'},Denier:{pt:'Denier (Den)',es:'Denier (Den)',fr:'Denier (Den)',en:'Denier (Den)'},Tex:{pt:'Tex',es:'Tex',fr:'Tex',en:'Tex'},Dtex:{pt:'Decitex',es:'Decitex',fr:'Décitex',en:'Decitex'}};
@@ -636,13 +638,13 @@ function calcConversao(){
 // ════ Cálculos rápidos ════
 function calcPolCm(origem){
   const polEl=document.getElementById('pc-pol'),cmEl=document.getElementById('pc-cm');
-  if(origem==='pol'){const p=parseFloat(polEl.value);cmEl.value=(p>0)?(p*2.54).toFixed(3):'';}
-  else{const c=parseFloat(cmEl.value);polEl.value=(c>0)?(c/2.54).toFixed(3):'';}
+  if(origem==='pol'){const p=parseFloat((polEl.value||'').replace(',','.'));cmEl.value=(!isNaN(p)&&p>0)?(p*2.54).toFixed(3):'';}
+  else{const c=parseFloat((cmEl.value||'').replace(',','.'));polEl.value=(!isNaN(c)&&c>0)?(c/2.54).toFixed(3):'';}
 }
-function calcR1(){const p=parseFloat(document.getElementById('r1-plm').value),l=parseFloat(document.getElementById('r1-larg').value);document.getElementById('r1-result').value=(p>0&&l>0)?(p/l).toFixed(2):'';}
-function calcR2(){const g=parseFloat(document.getElementById('r2-gram').value),l=parseFloat(document.getElementById('r2-larg').value);document.getElementById('r2-result').value=(g>0&&l>0)?(g*l).toFixed(2):'';}
-function calcR3(){const p=parseFloat(document.getElementById('r3-plm').value),tt=parseFloat(document.getElementById('r3-ptot').value);document.getElementById('r3-result').value=(p>0&&tt>0)?((tt*1000)/p).toFixed(2):'';}
-function calcR4(){const p=parseFloat(document.getElementById('r4-plm').value),c=parseFloat(document.getElementById('r4-comp').value);document.getElementById('r4-result').value=(p>0&&c>0)?((p*c)/1000).toFixed(4):'';}
+function calcR1(){const p=parseFloat(vc('r1-plm')),l=parseFloat(vc('r1-larg'));document.getElementById('r1-result').value=(p>0&&l>0)?(p/l).toFixed(2):'';}
+function calcR2(){const g=parseFloat(vc('r2-gram')),l=parseFloat(vc('r2-larg'));document.getElementById('r2-result').value=(g>0&&l>0)?(g*l).toFixed(2):'';}
+function calcR3(){const p=parseFloat(vc('r3-plm')),tt=parseFloat(vc('r3-ptot'));document.getElementById('r3-result').value=(p>0&&tt>0)?((tt*1000)/p).toFixed(2):'';}
+function calcR4(){const p=parseFloat(vc('r4-plm')),c=parseFloat(vc('r4-comp'));document.getElementById('r4-result').value=(p>0&&c>0)?((p*c)/1000).toFixed(4):'';}
 
 // ════ Init ════
 setTipo('algodao');updateMxLabels();setLang('pt');
